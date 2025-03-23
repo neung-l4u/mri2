@@ -1,114 +1,104 @@
 <?php
-$teams = array("None", "Sales", "Customer Support", "Account Manager", "Marketing", "IT", "HR")
+session_start();
+if (isset($_SESSION['user_id'])) {
+    header("Location: dashboard.php");
+    exit;
+}
+
+$remember = $_COOKIE['remember_remember'] ?? '';
+$username = $_COOKIE['remember_username'] ?? '';
+$password = $_COOKIE['remember_password'] ?? '';
 ?>
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Account Form</title>
-    <link rel="stylesheet" href="../assets/css/bootstrap5.3.3.min.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>เข้าสู่ระบบ</title>
+    <link href="../assets/libs/bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/css/index.css" rel="stylesheet">
 </head>
 <body>
-<div class="container mt-4">
-    <h3 class="mb-3">Create Employee Account</h3>
-    <form method="POST" enctype="multipart/form-data" action="result.php">
-        <h5 class="mt-3">Employee Details</h5>
-        <div class="border rounded p-2 mb-4">
-        <table class="table table-borderless table-hover">
-            <tr>
-                <td>
-                    <label for="employee_id" class="form-label">รหัสพนักงาน</label>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="basic-addon1">LOC</span>
-                        <input id="employee_id" type="text" name="employee_id" class="form-control">
-                    </div>
-                </td>
-                <td>
-                    <label for="start_date" class="form-label">วันที่เริ่มงาน</label>
-                    <input id="start_date" type="date" name="start_date" class="form-control" value="<?php echo getNextMonday(); ?>">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="team" class="form-label">ทีม</label>
-                    <select id="team" name="team" class="form-select">
-                        <?php
-                        foreach ($teams as $team) {
-                            echo '<option value="' . $team . '">' . $team . '</option>';
-                        }
-                        ?>
-                    </select>
-                </td>
-                <td>
-                    <label for="position" class="form-label">ตำแหน่ง</label>
-                    <input id="position" type="text" name="position" class="form-control">
-                </td>
-            </tr>
-
-            </table>
+<div class="login-card">
+    <div class="text-center mb-4">
+        <h4 class="fw-bold text-primary"><img src="../assets/img/logo-web-144.png" alt="logo"></h4>
+        <p class="text-primary small">เข้าสู่ระบบ</p>
+    </div>
+    <form id="loginForm">
+        <div class="mb-3">
+            <label for="username" class="form-label">เบอร์โทรศัพท์ หรือ อีเมล</label>
+            <input type="text" class="form-control" id="username" name="username" value="<?php echo $username; ?>" required>
         </div>
-
-        <h5 class="mt-3">Personal Information</h5>
-        <div class="border rounded p-2 mb-4">
-        <table class="table table-borderless table-hover">
-            <tr>
-                <td>
-                    <label for="nickname_th" class="form-label">ชื่อเล่น (ไทย)</label>
-                    <input id="nickname_th" type="text" name="nickname_th" class="form-control">
-                </td>
-                <td>
-                    <label for="fullName_th" class="form-label">ชื่อจริงและนามสกุล (ไทย)</label>
-                    <input id="fullName_th" type="text" name="fullName_th" class="form-control">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="nickname_en" class="form-label">ชื่อเล่น (อังกฤษ)</label>
-                    <input id="nickname_en" type="text" name="nickname_en" class="form-control">
-                </td>
-                <td>
-                    <label for="fullName_en" class="form-label">ชื่อจริงและนามสกุล (อังกฤษ)</label>
-                    <input id="fullName_en" type="text" name="fullName_en" class="form-control">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="dob" class="form-label">วันเกิด</label>
-                    <input id="dob" type="date" name="dob" class="form-control" value="">
-                </td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="mobile" class="form-label">เบอร์มือถือ</label>
-                    <input id="mobile" type="tel" name="mobile" class="form-control">
-                </td>
-                <td>
-                    <label for="personal_email" class="form-label">อีเมลส่วนตัว</label>
-                    <input id="personal_email" type="email" name="personal_email" class="form-control">
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <label for="address" class="form-label">ที่อยู่ปัจจุบัน</label>
-                    <textarea id="address" name="address" class="form-control"></textarea>
-                </td>
-            </tr>
-        </table>
+        <div class="mb-3">
+            <label for="password" class="form-label">รหัสผ่าน</label>
+            <div class="input-group">
+                <input type="password" class="form-control" id="password" name="password" value="<?php echo $password; ?>" required>
+                <button type="button" class="btn btn-outline-secondary" onclick="togglePassword()">👁</button>
+            </div>
         </div>
-        <div class="text-center">
-            <button type="submit" class="btn btn-primary">Submit</button>
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="remember" name="remember" <?php echo ($remember) ? 'checked': ''; ?> >
+            <label class="form-check-label" for="remember">จดจำฉันไว้</label>
+        </div>
+        <div class="d-grid">
+            <button type="button" onclick="login();" class="btn btn-primary">เข้าสู่ระบบ</button>
+        </div>
+        <div id="loginAlert" class="alert alert-danger mt-3 d-none" role="alert">
+            ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง
         </div>
     </form>
 </div>
-<script src="../assets/js/jquery-3.7.1.min.js"></script>
-<script src="../assets/js/bootstrap.bundle.5.3.3.min.js"></script>
+
+<script src="../assets/libs/jQuery-v3.7.1/jquery-3.7.1.min.js"></script>
+<script>
+    let payload = {};
+
+    const username = $('#username');
+    const password = $('#password');
+    const remember = $('#remember');
+    const loginAlert = $('#loginAlert');
+
+    function togglePassword() {
+        const pwd = document.getElementById('password');
+        pwd.type = pwd.type === 'password' ? 'text' : 'password';
+    }
+
+    function login() {
+        payload.act = "login";
+        payload.username = username.val();
+        payload.password = password.val();
+        payload.remember = remember.is(':checked'); ;
+
+        loginAlert.addClass('d-none');
+
+        const chkLogin = $.ajax({
+            url: "../assets/php/login.php",
+            method: 'POST',
+            async: false,
+            cache: false,
+            dataType: 'json',
+            data: payload
+        });
+
+        chkLogin.done(function (res) {
+            console.log(res);
+            if(res.result === "success"){
+                loginAlert.html(res.msg).removeClass('alert-danger').addClass('alert-success').removeClass('d-none');
+                setTimeout(() => { location.replace('dashboard.php'); }, 500);
+            }else if(res.result === "fail"){
+                loginAlert.html(res.msg).removeClass('alert-success').addClass('alert-danger').removeClass('d-none');
+            }
+        });
+
+        chkLogin.fail(function (xhr, status, error) {
+            console.log("ajax get Price fail!!");
+            console.log(status + ": " + error);
+        });
+    }//login
+
+    $(()=>{
+
+    });//ready
+</script>
 </body>
 </html>
-<?php
-function getNextMonday(): string
-{
-    return date('Y-m-d', strtotime('next monday'));
-}
-?>

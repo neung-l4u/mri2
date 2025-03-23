@@ -1,13 +1,10 @@
 <?php
-
-use templates\assets\db\db;
-
 date_default_timezone_set("Asia/Bangkok");
 error_reporting(E_ERROR | E_PARSE);
 
-$dbHost = '85.187.128.54';
-$dbUser = 'localfor_reports';
-$dbPass = 'Localforyou2023!';
-$dbName = 'localfor_reports';
+$dbHost = 'localhost';
+$dbUser = 'u875011897_dev_neung';
+$dbPass = 'qhrXQ6T2c?wAt_Z!';
+$dbName = 'u875011897_mri_inventory';
 
 $db = new db($dbHost, $dbUser, $dbPass, $dbName);

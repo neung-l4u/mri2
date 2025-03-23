@@ -1,0 +1,19 @@
+body {
+    background: linear-gradient(to right, #e3f2fd, #ffffff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.login-card {
+    background: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 420px;
+}
+.form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(33, 150, 243, 0.25);
+    border-color: #2196f3;
+}
