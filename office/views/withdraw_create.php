@@ -27,9 +27,19 @@ $products = $db->query("SELECT p.id, p.name, p.package_size_grams, cpp.price_per
     <title>เบิกสินค้า</title>
     <link href="../assets/libs/bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body class="container p-5">
-<div>
-    <h3 class="mb-4">เบิกสินค้าให้ลูกค้า</h3>
+<body class="bg-light">
+<div class="container py-5">
+    <?php include "topNav.php"; ?>
+    <div class="mb-3 card rounded border-0 shadow-sm">
+        <nav class="card-body" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="dashboard.php">แดชบอร์ด</a></li>
+                <li class="breadcrumb-item"><a href="withdraw_list.php">รายการเบิกย้อนหลัง</a></li>
+                <li class="breadcrumb-item active" aria-current="page">เบิกสินค้าให้ลูกค้า</li>
+            </ol>
+        </nav>
+    </div>
+    <h4 class="mb-4">เบิกสินค้าให้ลูกค้า</h4>
     <form method="POST" action="withdraw_store.php">
         <div class="mb-3">
             <label for="customer_id" class="form-label">เลือกลูกค้า</label>

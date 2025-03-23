@@ -1,4 +1,5 @@
 <?php
+global $db;
 session_start();
 include_once('../assets/db/db.php');
 include_once('../assets/db/initDB.php');
@@ -23,8 +24,16 @@ $orders = $db->query("SELECT o.id, o.withdrawal_date, o.total_amount, o.is_paid,
     <link href="../assets/libs/bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="container py-5">
-<h3 class="mb-4">รายการเบิกย้อนหลัง</h3>
-
+<?php include "topNav.php"; ?>
+<div class="mb-3 card rounded border-0 shadow-sm">
+    <nav class="card-body" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="dashboard.php">แดชบอร์ด</a></li>
+            <li class="breadcrumb-item active" aria-current="page">รายการเบิกย้อนหลัง</li>
+        </ol>
+    </nav>
+</div>
+<h4 class="mb-4">รายการเบิกย้อนหลัง</h4>
 <table class="table table-bordered table-hover">
     <thead class="table-light">
     <tr>

@@ -6,9 +6,9 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta http-equiv="refresh" content="0; url=views/index.php?token=456" />
-    <title>New Staff</title>
+    <title>แดชบอร์ด</title>
 </head>
 <body>
-<p><a href="views/index.php?token=789">Redirect</a></p>
+<p><a href="views/index.php?token=789">ไปหน้าถัดไป</a></p>
 </body>
 </html>

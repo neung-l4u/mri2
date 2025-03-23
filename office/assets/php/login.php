@@ -37,6 +37,7 @@ if ($act === 'login') {
             }else{
                 $response['result'] = 'success';
                 $response["msg"] = "เข้าสู่ระบบสำเร็จ!";
+                $response["role"] = $user['role'];
 
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['role'] = $user['role'];
