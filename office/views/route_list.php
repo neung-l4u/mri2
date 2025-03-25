@@ -9,13 +9,17 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'owner') {
     exit;
 }
 
-$routes = $db->query("SELECT r.*, u.name AS salesperson_name,
-                      (SELECT COUNT(*) FROM customers c WHERE c.route_id = r.id AND c.deleted_at IS NULL) AS customer_count
-                      FROM customer_routes r
-                      LEFT JOIN salespersons s ON r.salesperson_id = s.id
-                      LEFT JOIN users u ON s.id = u.salesperson_id
-                      WHERE r.deleted_at IS NULL
-                      ORDER BY r.route_code")->fetchAll();
+$routes = $db->query("SELECT r.*, 
+  (SELECT COUNT(*) FROM customers c WHERE c.route_id = r.id AND c.deleted_at IS NULL) AS customer_count,
+  (
+    SELECT GROUP_CONCAT(DISTINCT u.name SEPARATOR ', ')
+    FROM customers c
+    JOIN users u ON u.salesperson_id = c.salesperson_id
+    WHERE c.route_id = r.id AND u.deleted_at IS NULL
+  ) AS salesperson_names
+  FROM customer_routes r
+  WHERE r.deleted_at IS NULL
+  ORDER BY r.route_code")->fetchAll();
 ?>
 <!doctype html>
 <html lang="th">
@@ -46,12 +50,12 @@ $routes = $db->query("SELECT r.*, u.name AS salesperson_name,
             <table class="table table-bordered table-sm align-middle">
                 <thead class="table-light">
                 <tr>
-                    <th>รหัสสาย</th>
+                    <th style="width: 100px">รหัสสาย</th>
                     <th>ชื่อสาย</th>
-                    <th>เซลที่ดูแล</th>
-                    <th>จำนวนลูกค้า</th>
-                    <th>สถานะ</th>
-                    <th>จัดการ</th>
+                    <th style="width: 150px">เซลที่ดูแล</th>
+                    <th style="width: 120px">จำนวนลูกค้า</th>
+                    <th style="width: 90px">สถานะ</th>
+                    <th style="width: 200px; text-align: center">จัดการ</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -59,10 +63,13 @@ $routes = $db->query("SELECT r.*, u.name AS salesperson_name,
                     <tr>
                         <td><?php echo htmlspecialchars($r['route_code']) ?></td>
                         <td><?php echo htmlspecialchars($r['route_name']) ?></td>
-                        <td><?php echo $r['salesperson_name'] ?: '-' ?></td>
+                        <td><?php echo $r['salesperson_names'] ?: '-' ?></td>
                         <td class="text-center"><?php echo $r['customer_count'] ?></td>
                         <td><?php echo $r['status'] === 'on' ? 'เปิดใช้งาน' : 'ปิดใช้งาน' ?></td>
-                        <td><a href="#" class="btn btn-sm btn-outline-secondary">แก้ไข</a></td>
+                        <td style="text-align: right">
+                            <a href="customer_list.php?route_id=<?php echo $r['id'] ?>" class="btn btn-sm btn-outline-primary">ลูกค้า</a>
+                            <a href="route_edit.php?id=<?php echo $r['id'] ?>" class="btn btn-sm btn-outline-secondary">แก้ไข</a>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>

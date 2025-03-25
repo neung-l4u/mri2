@@ -5,6 +5,8 @@ require_once '../assets/db/initDB.php';
 global $db;
 $salt = "MRI";
 
+$timestamp = round(microtime(true) * 1000);
+
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'owner') {
     header("Location: ../index.php");
     exit;
@@ -18,6 +20,7 @@ $password = $_POST['password'] ?? '';
 $role = $_POST['role'] ?? '';
 $route_ids = $_POST['route_ids'] ?? [];
 $created_by = $_SESSION['user_id'];
+$username = $timestamp;
 
 if ($name === '' || $phone === '' || $password === '' || $role === '') {
     die('กรุณากรอกข้อมูลให้ครบ');
@@ -42,9 +45,9 @@ if ($role === 'sales') {
 }
 
 // บันทึก user
-$db->query("INSERT INTO users (name, nickname, phone, email, password_hash, role, salesperson_id, status, created_by)
-            VALUES (?, ?, ?, ?, ?, ?, ?, 'on', ?)",
-    $name, $nickname, $phone, $email, $hashed_password, $role, $salesperson_id, $created_by);
+$db->query("INSERT INTO users (username, name, nickname, phone, email, password_hash, role, salesperson_id, status, created_by)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'on', ?)",
+    $username, $name, $nickname, $phone, $email, $hashed_password, $role, $salesperson_id, $created_by);
 
 header("Location: user_list.php");
 exit;

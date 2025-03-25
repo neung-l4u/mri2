@@ -60,7 +60,7 @@ $products = $db->query("SELECT p.*, c.name AS category_name
                         <td><?php echo number_format($p['package_size_grams']) ?></td>
                         <td class="text-end">฿<?php echo number_format($p['default_price_per_pack'], 2) ?></td>
                         <td><?php echo $p['status'] === 'on' ? 'เปิดใช้งาน' : 'ปิดใช้งาน' ?></td>
-                        <td><a href="#" class="btn btn-sm btn-outline-secondary">แก้ไข</a></td>
+                        <td><a href="product_edit.php?id=<?php echo $p['id'] ?>" class="btn btn-sm btn-outline-secondary">แก้ไข</a></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>

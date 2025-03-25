@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'owner') {
     exit;
 }
 
-$banks = $db->query("SELECT * FROM bank_accounts WHERE deleted_at IS NULL ORDER BY display_name")->fetchAll();
+$banks = $db->query("SELECT * FROM banks WHERE deleted_at IS NULL ORDER BY bank_name")->fetchAll();
 ?>
 <!doctype html>
 <html lang="th">
@@ -32,41 +32,38 @@ $banks = $db->query("SELECT * FROM bank_accounts WHERE deleted_at IS NULL ORDER 
 
     <div class="bg-white p-4 rounded shadow-sm">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="mb-0">รายการบัญชีธนาคาร</h4>
-            <a href="bank_create.php" class="btn btn-primary btn-sm">+ เพิ่มบัญชีใหม่</a>
+            <h4 class="mb-0">รายการธนาคาร</h4>
+            <a href="bank_create.php" class="btn btn-primary btn-sm">+ เพิ่มธนาคารใหม่</a>
         </div>
 
         <div class="table-responsive">
             <table class="table table-bordered table-sm align-middle">
                 <thead class="table-light">
                 <tr>
-                    <th>ชื่อเรียก</th>
-                    <th>ชื่อบัญชี</th>
-                    <th>เลขที่บัญชี</th>
+                    <th style="width: 30px; text-align: center;">#</th>
                     <th>ธนาคาร</th>
-                    <th>สาขา</th>
-                    <th>วันที่เปิดใช้</th>
-                    <th>ธุรกรรม</th>
-                    <th>สถานะ</th>
-                    <th>จัดการ</th>
+                    <th style="width: 150px;">สถานะ</th>
+                    <th style="width: 150px; text-align: center">จัดการ</th>
                 </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($banks as $b): ?>
+                <?php
+                $i = 1;
+                foreach ($banks as $b):
+                    ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($b['display_name']) ?></td>
-                        <td><?php echo htmlspecialchars($b['account_name']) ?></td>
-                        <td><?php echo htmlspecialchars($b['account_number']) ?></td>
+                        <td style="text-align: center;"><?php echo $i; ?></td>
                         <td><?php echo htmlspecialchars($b['bank_name']) ?></td>
-                        <td><?php echo htmlspecialchars($b['branch']) ?></td>
-                        <td><?php echo $b['opened_at'] ?></td>
-                        <td class="text-center"><?php echo $b['transaction_count'] ?></td>
-                        <td><?php echo $b['status'] === 'active' ? 'เปิดใช้งาน' : 'ปิดใช้งาน' ?></td>
-                        <td>
-                            <a href="#" class="btn btn-sm btn-outline-secondary">แก้ไข</a>
+                        <td><?php echo $b['status'] === 'on' ? 'เปิดใช้งาน' : 'ปิดใช้งาน' ?></td>
+                        <td style="text-align: right;">
+                            <a href="bank_account_list.php?id=<?php echo $b['id'] ?>" class="btn btn-sm btn-outline-secondary">บัญชี</a>
+                            <a href="bank_edit.php?id=<?php echo $b['id'] ?>" class="btn btn-sm btn-outline-secondary">แก้ไข</a>
                         </td>
                     </tr>
-                <?php endforeach; ?>
+                <?php
+                $i++;
+                endforeach;
+                ?>
                 </tbody>
             </table>
         </div>

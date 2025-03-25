@@ -15,17 +15,16 @@ if (!$user) {
     exit('ไม่พบผู้ใช้งาน');
 }
 
-$routes = $db->query("SELECT id, route_name, salesperson_id FROM customer_routes WHERE deleted_at IS NULL AND status = 'on' ORDER BY route_name")->fetchAll();
-
+// ดึงสายที่เซลดูแลอยู่ (จาก customers.route_id)
 $current_routes = [];
 if ($user['role'] === 'sales' && $user['salesperson_id']) {
-    foreach ($routes as $r) {
-        if ($r['salesperson_id'] == $user['salesperson_id']) {
-            $current_routes[] = $r['id'];
-        }
-    }
+    $rows = $db->query("SELECT DISTINCT route_id FROM customers WHERE salesperson_id = ? AND deleted_at IS NULL", $user['salesperson_id'])->fetchAll();
+    $current_routes = array_column($rows, 'route_id');
 }
+
+$routes = $db->query("SELECT id, route_name FROM customer_routes WHERE deleted_at IS NULL AND status = 'on' ORDER BY route_name")->fetchAll();
 ?>
+
 <!doctype html>
 <html lang="th">
 <head>
@@ -70,12 +69,13 @@ if ($user['role'] === 'sales' && $user['salesperson_id']) {
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">บทบาท</label>
-                    <input type="text" class="form-control" value="<?php echo $user['role'] ?>" readonly>
+                    <input type="text" class="form-control" value="<?php echo htmlspecialchars($user['role']) ?>" readonly>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">รหัสผ่านใหม่ (ถ้าต้องการเปลี่ยน)</label>
                     <input type="password" name="password" class="form-control">
                 </div>
+
                 <?php if ($user['role'] === 'sales'): ?>
                     <div class="col-12">
                         <label class="form-label">สายลูกค้าที่ดูแล</label>
@@ -88,6 +88,7 @@ if ($user['role'] === 'sales' && $user['salesperson_id']) {
                         </select>
                     </div>
                 <?php endif; ?>
+
                 <div class="col-12 text-end">
                     <button type="submit" class="btn btn-success">บันทึกการแก้ไข</button>
                 </div>

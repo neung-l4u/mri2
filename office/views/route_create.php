@@ -43,13 +43,8 @@ $salespersons = $db->query("SELECT id, name FROM users WHERE role = 'sales' AND 
                     <input type="text" name="route_name" class="form-control" required>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">เซลที่ดูแล</label>
-                    <select name="salesperson_id" class="form-select">
-                        <option value="">-- ยังไม่กำหนด --</option>
-                        <?php foreach ($salespersons as $s): ?>
-                            <option value="<?php echo $s['id'] ?>"><?php echo $s['name'] ?></option>
-                        <?php endforeach; ?>
-                    </select>
+                    <label for="description" class="form-label">คำอธิบาย</label>
+                    <textarea name="description" id="description" class="form-control" rows="3"></textarea>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">สถานะ</label>

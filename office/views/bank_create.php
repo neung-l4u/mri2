@@ -29,42 +29,22 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'owner') {
     </div>
 
     <div class="bg-white p-4 rounded shadow-sm">
-        <h4 class="mb-4">เพิ่มบัญชีธนาคารใหม่</h4>
+        <h4 class="mb-4">เพิ่มธนาคารใหม่</h4>
         <form method="POST" action="bank_store.php">
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label class="form-label">ชื่อเรียกบัญชี</label>
-                    <input type="text" name="display_name" class="form-control" required>
+                    <label for="bank_name" class="form-label">ธนาคาร</label>
+                    <input id="bank_name" type="text" name="bank_name" class="form-control" required>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">ชื่อบัญชี</label>
-                    <input type="text" name="account_name" class="form-control" required>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">เลขที่บัญชี</label>
-                    <input type="text" name="account_number" class="form-control" required>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">ธนาคาร</label>
-                    <input type="text" name="bank_name" class="form-control" required>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">สาขา</label>
-                    <input type="text" name="branch" class="form-control">
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">วันที่เปิดใช้</label>
-                    <input type="date" name="opened_at" class="form-control" value="<?php echo date('Y-m-d') ?>">
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">สถานะ</label>
-                    <select name="status" class="form-select">
-                        <option value="active" selected>เปิดใช้งาน</option>
-                        <option value="inactive">ปิดใช้งาน</option>
+                    <label for="status" class="form-label">สถานะ</label>
+                    <select id="status" name="status" class="form-select">
+                        <option value="on" selected>เปิดใช้งาน</option>
+                        <option value="off">ปิดใช้งาน</option>
                     </select>
                 </div>
                 <div class="col-12 text-end">
-                    <button type="submit" class="btn btn-success">บันทึกบัญชี</button>
+                    <button type="submit" class="btn btn-success">บันทึกธนาคาร</button>
                 </div>
             </div>
         </form>

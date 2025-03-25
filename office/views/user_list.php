@@ -9,12 +9,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'owner') {
     exit;
 }
 
-$users = $db->query("SELECT u.*, GROUP_CONCAT(r.route_name ORDER BY r.route_code SEPARATOR ', ') AS routes
-                    FROM users u
-                    LEFT JOIN customer_routes r ON u.salesperson_id = r.salesperson_id
-                    WHERE u.deleted_at IS NULL
-                    GROUP BY u.id
-                    ORDER BY u.role, u.name")->fetchAll();
+$users = $db->query("SELECT * FROM users WHERE deleted_at IS NULL ORDER BY role desc, name")->fetchAll();
 ?>
 <!doctype html>
 <html lang="th">
@@ -57,16 +52,32 @@ $users = $db->query("SELECT u.*, GROUP_CONCAT(r.route_name ORDER BY r.route_code
                 </thead>
                 <tbody>
                 <?php foreach ($users as $u): ?>
+                    <?php
+                    $routes = [];
+                    if ($u['role'] === 'sales' && $u['salesperson_id']) {
+                        $routes = $db->query("SELECT DISTINCT r.route_name FROM customers c JOIN customer_routes r ON c.route_id = r.id WHERE c.salesperson_id = ? AND r.deleted_at IS NULL", $u['salesperson_id'])->fetchAll();
+                    }
+                    ?>
                     <tr>
                         <td><?php echo htmlspecialchars($u['name']) ?></td>
                         <td><?php echo htmlspecialchars($u['nickname']) ?></td>
                         <td><?php echo htmlspecialchars($u['phone']) ?></td>
                         <td><?php echo htmlspecialchars($u['email']) ?></td>
-                        <td><?php echo htmlspecialchars($u['role']) ?></td>
-                        <td><?php echo $u['role'] === 'sales' ? htmlspecialchars($u['routes']) : '-' ?></td>
+                        <td><?php echo htmlspecialchars(roleName($u['role'])) ?></td>
+                        <td>
+                            <?php
+                            if ($u['role'] === 'sales') {
+                                echo !empty($routes)
+                                    ? implode(', ', array_column($routes, 'route_name'))
+                                    : '<span class="text-muted">-</span>';
+                            } else {
+                                echo '-';
+                            }
+                            ?>
+                        </td>
                         <td><?php echo $u['status'] === 'on' ? 'เปิดใช้งาน' : 'ปิดใช้งาน' ?></td>
                         <td>
-                            <a href="#" class="btn btn-sm btn-outline-secondary">แก้ไข</a>
+                            <a href="user_edit.php?id=<?php echo $u['id'] ?>" class="btn btn-sm btn-outline-secondary">แก้ไข</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -77,3 +88,10 @@ $users = $db->query("SELECT u.*, GROUP_CONCAT(r.route_name ORDER BY r.route_code
 </div>
 </body>
 </html>
+<?php
+function roleName($role)
+{
+    if ($role == 'sales') { return 'เซล'; }
+    else if ($role == 'owner') { return 'เจ้าของ'; }
+}
+?>
