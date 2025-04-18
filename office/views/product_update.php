@@ -32,5 +32,5 @@ $db->query("UPDATE products SET
   WHERE id = ?",
     $name, $category_id, $package_size_grams, $default_price_per_pack, $status, $updated_by, $id);
 
-header("Location: product_list.php");
+header("Location: main.php?p=products");
 exit;

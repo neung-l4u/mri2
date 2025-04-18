@@ -20,5 +20,5 @@ if ($name === '') {
 $db->query("INSERT INTO product_categories (name, status, created_by) VALUES (?, ?, ?)",
     $name, $status, $created_by);
 
-header("Location: product_category_list.php");
+header("Location: main.php?p=category");
 exit;

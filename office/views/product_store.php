@@ -24,5 +24,5 @@ $db->query("INSERT INTO products (name, category_id, package_size_grams, default
             VALUES (?, ?, ?, ?, ?, ?)",
     $name, $category_id, $package_size_grams, $default_price_per_pack, $status, $created_by);
 
-header("Location: product_list.php");
+header("Location: main.php?p=products");
 exit;

@@ -26,5 +26,5 @@ $db->query("UPDATE product_categories SET
   WHERE id = ?",
     $name, $status, $updated_by, $id);
 
-header("Location: product_category_list.php");
+header("Location: main.php?p=category");
 exit;
