@@ -47,5 +47,6 @@ if ($user['role'] === 'sales' && $user['salesperson_id']) {
     }
 }
 
-header("Location: user_list.php");
+//header("Location: user_list.php");
+header("Location: main.php?p=users");
 exit;

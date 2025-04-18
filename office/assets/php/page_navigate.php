@@ -5,7 +5,6 @@ $myRole = $_SESSION['role'];
 
 $menuPage = $_REQUEST["p"] ?? "dashboard";
 
-
 if ($myRole == "owner") {
     if ($menuPage == "dashboard") {
         $showPage = "dashboard_owner.php";
@@ -34,6 +33,10 @@ if ($myRole == "owner") {
     }else if ($menuPage == "report") {
         $showPage = "report_sales.php";
         $activeMenu["lv1"] = "report";
+        $activeMenu["lv2"] = "";
+    }else if ($menuPage == "quotation") {
+        $showPage = "quotation_form.php";
+        $activeMenu["lv1"] = "quotation";
         $activeMenu["lv2"] = "";
     }
 }else if ($myRole=="sales") {

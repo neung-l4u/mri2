@@ -23,7 +23,7 @@ $myPass = $_SESSION['password'];
     <link rel="stylesheet" href="../assets/libs/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="../dist/css/adminlte.min.css">
     <link rel="stylesheet" href="../assets/libs/bootstrap-5.3.3-dist/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="../assets/libs/datatablesBootstrap5/css/dataTables.bootstrap5.css">
+<!--    <link rel="stylesheet" href="../assets/libs/datatablesBootstrap5/css/dataTables.bootstrap5.css">-->
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -46,13 +46,10 @@ $myPass = $_SESSION['password'];
 <script src="../assets/libs/jQuery-v3.7.1/jquery-3.7.1.min.js"></script>
 <script src="../assets/libs/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
 <script src="../dist/js/adminlte.min.js"></script>
-<script type="text/javascript" src="../assets/libs/datatablesBootstrap5/js/dataTables2.2.2.js"></script>
-<script type="text/javascript" src="../assets/libs/datatablesBootstrap5/js/dataTables.bootstrap5.js"></script>
+<!--<script type="text/javascript" src="../assets/libs/datatablesBootstrap5/js/dataTables2.2.2.js"></script>
+<script type="text/javascript" src="../assets/libs/datatablesBootstrap5/js/dataTables.bootstrap5.js"></script>-->
 
 <script>
-    $(()=>{
-        console.log("I'm ready");
-    });//ready
 
 </script>
 

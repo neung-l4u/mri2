@@ -1,5 +1,7 @@
 <?php
 session_start();
+$myID = $_SESSION['user_id'];
+
 require_once '../assets/db/db.php';
 require_once '../assets/db/initDB.php';
 global $db;
@@ -122,9 +124,9 @@ $categories = $db->query("SELECT id, name FROM product_categories WHERE deleted_
                                     </div>
                                     <div class="col-12 text-end">
                                         <button type="submit" class="btn btn-success" onclick="formSave()">บันทึกสินค้า</button>
+                                        <input type="hidden" id="formAction" value="add">
+                                        <input type="hidden" id="userID" value="<?php echo $myID; ?>">
                                     </div>
-                                    <input type="text" name="formAction" id="formAction" value="add">
-                                    <input type="text" name="editID" id="editID" value="<?php echo $_SESSION['user_id'];?>">
                                 </div>
                             </form>
                             </div>
