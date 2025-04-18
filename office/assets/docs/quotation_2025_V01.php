@@ -54,9 +54,7 @@ $data["rowThrNote"] = !empty($_REQUEST["rowThrNote"]) ? trim($_REQUEST["rowThrNo
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Quotation</title>
-    <link href="../css/bootstrap.4.5.2.min.css" rel="stylesheet" type="text/css">
-    <link href="../css/bootstrap5.3.3.min.css" rel="stylesheet" type="text/css">
-    <link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="../libs/bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="../css/quotation_form.css" rel="stylesheet" type="text/css">
     <style>
         body {
