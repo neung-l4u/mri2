@@ -22,5 +22,5 @@ $db->query("INSERT INTO banks
   VALUES (?, ?, ?)",
     $bank_name, $status, $created_by);
 
-header("Location: bank_list.php");
+header("Location: main.php?p=banks");
 exit;

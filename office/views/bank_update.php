@@ -26,5 +26,5 @@ $db->query("UPDATE banks SET
   WHERE id = ?",
     $bank_name, $status, $updated_by, $id);
 
-header("Location: bank_list.php");
+header("Location: main.php?p=banks");
 exit;
