@@ -80,6 +80,7 @@ $total_salespersons = $db->query("SELECT COUNT(*) AS total FROM users WHERE role
         <a href="product_list.php" class="btn btn-outline-primary">📦 จัดการสินค้า</a>
         <a href="product_category_list.php" class="btn btn-outline-primary">📂 จัดการประเภทสินค้า</a>
         <a href="report_sales.php" class="btn btn-outline-primary">🧾 รายงานยอดขาย</a>
+        <a href="quotation_form.php" class="btn btn-outline-primary">📑 ใบเสนอราคา</a>
         <a href="logout.php" class="btn btn-outline-danger">ออกจากระบบ</a>
     </div>
 </div>
