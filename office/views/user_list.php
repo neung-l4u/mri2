@@ -45,8 +45,8 @@ $users = $db->query("SELECT * FROM users WHERE deleted_at IS NULL ORDER BY role 
             <a id="btnModal" href="user_create.php" class="btn btn-primary">+ เพิ่มผู้ใช้งาน</a>
         </div>
 
-        <div class="">
-            <table id="example" class="table table-borderless table-striped table-hover">
+        <div class="table-responsive">
+            <table id="tableData" class="table table-borderless table-striped table-hover">
                 <thead class="table-dark">
                 <tr>
                     <th>ชื่อ</th>
