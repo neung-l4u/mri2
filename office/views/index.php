@@ -86,8 +86,8 @@ $password = $_COOKIE['remember_password'] ?? '';
             console.log(res);
             if(res.result === "success"){
                 loginAlert.html(res.msg).removeClass('alert-danger').addClass('alert-success').removeClass('d-none');
-                if(res.role === "sales"){ setTimeout(() => { location.replace('dashboard.php'); }, 500); }
-                else if(res.role === "owner"){ setTimeout(() => { location.replace('dashboard_owner.php'); }, 500); }
+                if(res.role === "sales"){ setTimeout(() => { location.replace('main.php?p=dashboard'); }, 500); }
+                else if(res.role === "owner"){ setTimeout(() => { location.replace('main.php?p=dashboard'); }, 500); }
 
             }else if(res.result === "fail"){
                 loginAlert.html(res.msg).removeClass('alert-success').addClass('alert-danger').removeClass('d-none');

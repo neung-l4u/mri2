@@ -1,157 +1,61 @@
 <?php
-$menuPage = isset($_REQUEST["p"]) ? $_REQUEST["p"] : "";
+session_start();
+$myID = $_SESSION['user_id'];
+$myRole = $_SESSION['role'];
 
-$showPage = "home.php";
-$activeMenu["lv1"] = "home";
-$activeMenu["lv2"] = "";
-$datatable["show"] = "false";
-$datatable["src"] = "";
-$datatable2["show"] = "false";
-$datatable2["src"] = "";
-$datatable["showDatatableStats"] = "false";
+$menuPage = $_REQUEST["p"] ?? "dashboard";
 
-switch ($menuPage){
-    case "home":
-        $showPage = "home.php";
-        $activeMenu["lv1"] = "home";
+
+if ($myRole == "owner") {
+    if ($menuPage == "dashboard") {
+        $showPage = "dashboard_owner.php";
+        $activeMenu["lv1"] = "dashboard";
         $activeMenu["lv2"] = "";
-        $datatable["show"] = "false";
-        $datatable["src"] = "";
-        $datatable2["show"] = "false";
-        $datatable2["src"] = "";
-        $datatable["showDatatableStats"] = "false";
-        break;
-    case "dashboard":
+    }else if ($menuPage == "users") {
+        $showPage = "user_list.php";
+        $activeMenu["lv1"] = "setup";
+        $activeMenu["lv2"] = "users";
+    }else if ($menuPage == "banks") {
+        $showPage = "bank_list.php";
+        $activeMenu["lv1"] = "setup";
+        $activeMenu["lv2"] = "banks";
+    }else if ($menuPage == "lines") {
+        $showPage = "route_list.php";
+        $activeMenu["lv1"] = "setup";
+        $activeMenu["lv2"] = "lines";
+    }else if ($menuPage == "products") {
+        $showPage = "product_list.php";
+        $activeMenu["lv1"] = "setup";
+        $activeMenu["lv2"] = "products";
+    }else if ($menuPage == "category") {
+        $showPage = "product_category_list.php";
+        $activeMenu["lv1"] = "setup";
+        $activeMenu["lv2"] = "category";
+    }else if ($menuPage == "report") {
+        $showPage = "report_sales.php";
+        $activeMenu["lv1"] = "report";
+        $activeMenu["lv2"] = "";
+    }
+}else if ($myRole=="sales") {
+    if ($menuPage == "dashboard") {
         $showPage = "dashboard.php";
         $activeMenu["lv1"] = "dashboard";
         $activeMenu["lv2"] = "";
-        $datatable["show"] = "false";
-        $datatable["src"] = "";
-        $datatable2["show"] = "false";
-        $datatable2["src"] = "";
-        $datatable["showDatatableStats"] = "false";
-        break;
-    case "revRestaurant":
-        $showPage = "revenueRestaurant.php";
-        $activeMenu["lv1"] = "revenueTracking";
-        $activeMenu["lv2"] = "restaurant";
-        $datatable["show"] = "true";
-        $datatable["src"] = "pages/tableRendering/dataRestaurant.php";
-        break;
-    case "revMassage":
-        $showPage = "revenueMassage.php";
-        $activeMenu["lv1"] = "revenueTracking";
-        $activeMenu["lv2"] = "massage";
-        $datatable["show"] = "true";
-        $datatable["src"] = "pages/tableRendering/dataMassage.php";
-        break;
-    case "revIHD":
-        $showPage = "revenueIHD.php";
-        $activeMenu["lv1"] = "revenueTracking";
-        $activeMenu["lv2"] = "IHD";
-        $datatable["show"] = "false";
-        $datatable["src"] = "";
-        $datatable2["show"] = "false";
-        $datatable2["src"] = "";
-        $datatable["showDatatableStats"] = "false";
-        break;
-    case "revStreams":
-        $showPage = "revenueStreams.php";
-        $activeMenu["lv1"] = "revenueTracking";
-        $activeMenu["lv2"] = "streams";
-        $datatable["show"] = "false";
-        $datatable["src"] = "";
-        $datatable2["show"] = "false";
-        $datatable2["src"] = "";
-        $datatable["showDatatableStats"] = "false";
-        break;
-    case "revStats":
-        $showPage = "revenueStats.php";
-        $activeMenu["lv1"] = "revenueTracking";
-        $activeMenu["lv2"] = "stats";
-        $datatable["showDatatableStats"] = "true";
-        $datatable["src"] = "pages/tableRendering/dataStats.php";
-        break;
-    case "revSubscription":
-        $showPage = "revenueSubscription.php";
-        $activeMenu["lv1"] = "revenueTracking";
-        $activeMenu["lv2"] = "subscription";
-        $datatable["show"] = "true";
-        $datatable["src"] = "pages/tableRendering/dataCostMonthly.php";
-        $datatable2["show"] = "true";
-        $datatable2["src"] = "pages/tableRendering/dataCostYearly.php";
-        $loadTotal["totalMonthly"] = "true";
-        $loadTotal["totalYearly"] = "true";
-        break;
-    case "revCompany"://หน้านี้เหมาะเอาไปทำสถิติหรือสรุปจำนวนพนักงาน
-        $showPage = "revenueCompany.php";
-        $activeMenu["lv1"] = "revenueTracking";
-        $activeMenu["lv2"] = "company";
-        break;
-    case "setStaff":
-        $showPage = "setStaffs.php";
-        $activeMenu["lv1"] = "settings";
-        $activeMenu["lv2"] = "staffs";
-        $datatable["show"] = "true";
-        $datatable["src"] = "pages/tableRendering/dataStaffs.php";
-        break;
-    case "coin":
-        $showPage = "coin.php";
-        $activeMenu["lv1"] = "coin";
-        $activeMenu["lv2"] = "coin";
-        $datatable["show"] = "false";
-        $datatable["src"] = "";
-        break;
-    case "websiteTemplate":
-        $showPage = "websiteTemplate.php";
-        $activeMenu["lv1"] = "websiteTemplate";
-        $activeMenu["lv2"] = "websiteTemplate";
-        $datatable["show"] = "true";
-        $datatable["src"] = "pages/tableRendering/dataWebsiteTemplate.php";
-        break;
-    case "myProfile":
-        $showPage = "myProfile.php";
-        $activeMenu["lv1"] = "myProfile";
+    }else if ($menuPage == "withdraw") {
+        $showPage = "withdraw_create.php";
+        $activeMenu["lv1"] = "withdraw";
         $activeMenu["lv2"] = "";
-        $datatable["show"] = "false";
-        $datatable["src"] = "";
-        $datatable2["show"] = "false";
-        $datatable2["src"] = "";
-        $datatable["showDatatableStats"] = "false";
-        break;
-    case "l4uPassword":
-        $showPage = "l4uPassword.php";
-        $activeMenu["lv1"] = "l4uPassword";
+    }else if ($menuPage == "withdrawHis") {
+        $showPage = "withdraw_list.php";
+        $activeMenu["lv1"] = "withdrawHis";
         $activeMenu["lv2"] = "";
-        $datatable["show"] = "true";
-        $datatable["src"] = "pages/tableRendering/dataPassword.php";
-        break;
-    case "viewLogs":
-        $showPage = "viewLogs.php";
-        $activeMenu["lv1"] = "";
+    }else if ($menuPage == "payment") {
+        $showPage = "payment_create.php";
+        $activeMenu["lv1"] = "payment";
         $activeMenu["lv2"] = "";
-        $datatable["show"] = "true";
-        $datatable["src"] = "pages/tableRendering/viewLogs.php";
-        break;
-    case "tpSubmitted":
-        $showPage = "tpSubmitted.php";
-        $activeMenu["lv1"] = "";
+    }else if ($menuPage == "paymentHis") {
+        $showPage = "payment_list.php";
+        $activeMenu["lv1"] = "paymentHis";
         $activeMenu["lv2"] = "";
-        $datatable["show"] = "true";
-        $datatable["src"] = "";
-        break;
-    case "tools":
-        $showPage = "tools.php";
-        $activeMenu["lv1"] = "";
-        $activeMenu["lv2"] = "";
-        $datatable["show"] = "true";
-        $datatable["src"] = "";
-        break;
-    case "unsub":
-        $showPage = "unSubmitted.php";
-        $activeMenu["lv1"] = "";
-        $activeMenu["lv2"] = "";
-        $datatable["show"] = "true";
-        $datatable["src"] = "";
-        break;
+    }
 }
