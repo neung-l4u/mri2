@@ -14,6 +14,7 @@ if ($route_id) {
     $route = $db->query("SELECT * FROM customer_routes WHERE id = ? AND deleted_at IS NULL", $route_id)->fetchArray();
 }
 $banks = $db->query("SELECT * FROM bank_accounts WHERE deleted_at IS NULL AND status = 'active' ORDER BY display_name")->fetchAll();
+$routes = $db->query("SELECT * FROM customer_routes WHERE deleted_at IS NULL AND status = 'on' ORDER BY route_name")->fetchAll();
 $salespersons = $db->query("SELECT DISTINCT u.salesperson_id, u.name FROM users u WHERE u.role = 'sales' AND u.salesperson_id IS NOT NULL AND u.deleted_at IS NULL AND u.status = 'on' ORDER BY u.name")->fetchAll();
 ?>
 <!doctype html>

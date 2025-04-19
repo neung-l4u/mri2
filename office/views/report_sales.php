@@ -111,7 +111,8 @@ $sales = $db->query($sql, ...$params)->fetchAll();
                 </select>
             </div>
             <div class="col-12">
-                <a href="report_sales.php" class="btn btn-outline-secondary btn-sm">ล้างค่า</a>
+                <a href="main.php?p=report" class="btn btn-outline-secondary btn-sm">ล้างค่า</a>
+                <input type="hidden" name="p" value="report">
             </div>
         </form>
 
@@ -131,19 +132,25 @@ $sales = $db->query($sql, ...$params)->fetchAll();
                 <?php
                 $sum_kg = 0;
                 $sum_amount = 0;
-                foreach ($sales as $s):
-                    $sum_kg += $s['total_kg'];
-                    $sum_amount += $s['total_amount'];
-                    ?>
-                    <tr>
-                        <td><?php echo $s['withdrawal_date'] ?></td>
-                        <td><?php echo $s['route_name'] ?></td>
-                        <td><?php echo $s['customer_code'] ?></td>
-                        <td><?php echo $s['customer_name'] ?></td>
-                        <td class="text-end"><?php echo number_format($s['total_kg'], 2) ?></td>
-                        <td class="text-end">฿<?php echo number_format($s['total_amount'], 2) ?></td>
-                    </tr>
-                <?php endforeach; ?>
+
+                if(count($sales)>0){
+                    foreach ($sales as $s):
+                        $sum_kg += $s['total_kg'];
+                        $sum_amount += $s['total_amount'];
+                        ?>
+                        <tr>
+                            <td><?php echo $s['withdrawal_date'] ?></td>
+                            <td><?php echo $s['route_name'] ?></td>
+                            <td><?php echo $s['customer_code'] ?></td>
+                            <td><?php echo $s['customer_name'] ?></td>
+                            <td class="text-end"><?php echo number_format($s['total_kg'], 2) ?></td>
+                            <td class="text-end">฿<?php echo number_format($s['total_amount'], 2) ?></td>
+                        </tr>
+                    <?php
+                    endforeach;
+                }else{ ?>
+                    <tr><td colspan="6" class="text-center text-danger">ไม่มีข้อมูล</td></tr>
+                <?php } ?>
                 </tbody>
                 <tfoot class="table-light">
                 <tr>
@@ -161,7 +168,8 @@ $sales = $db->query($sql, ...$params)->fetchAll();
 <script src="../assets/libs/select2/js/select2.min.js"></script>
 <script>
     function submitForm() {
-        document.getElementById('filterForm').submit();
+        //document.getElementById('filterForm').submit();
+        $("#filterForm").submit();
     }
 
     flatpickr(".flatpickr", {

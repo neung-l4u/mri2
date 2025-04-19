@@ -49,6 +49,7 @@ $users = $db->query("SELECT * FROM users WHERE deleted_at IS NULL ORDER BY role 
             <table id="tableData" class="table table-borderless table-striped table-hover">
                 <thead class="table-dark">
                 <tr>
+                    <th>#</th>
                     <th>ชื่อ</th>
                     <th>ชื่อเล่น</th>
                     <th>เบอร์โทร</th>
@@ -60,38 +61,46 @@ $users = $db->query("SELECT * FROM users WHERE deleted_at IS NULL ORDER BY role 
                 </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($users as $u): ?>
+                <?php
+                if (count($users) > 0) {
+                    $i=1;
+                    foreach ($users as $u): ?>
+                        <?php
+                        $routes = [];
+                        if ($u['role'] === 'sales' && $u['salesperson_id']) {
+                            $routes = $db->query("SELECT DISTINCT r.route_name FROM customers c JOIN customer_routes r ON c.route_id = r.id WHERE c.salesperson_id = ? AND r.deleted_at IS NULL", $u['salesperson_id'])->fetchAll();
+                        }
+                        ?>
+                        <tr>
+                            <td><?php echo $i; ?></td>
+                            <td><?php echo htmlspecialchars($u['name']) ?></td>
+                            <td><?php echo htmlspecialchars($u['nickname']) ?></td>
+                            <td><?php echo htmlspecialchars($u['phone']) ?></td>
+                            <td><?php echo htmlspecialchars($u['email']) ?></td>
+                            <td><?php echo htmlspecialchars(roleName($u['role'])) ?></td>
+                            <td>
+                                <?php
+                                if ($u['role'] === 'sales') {
+                                    echo !empty($routes)
+                                        ? implode(', ', array_column($routes, 'route_name'))
+                                        : '<span class="text-muted">-</span>';
+                                } else {
+                                    echo '-';
+                                }
+                                ?>
+                            </td>
+                            <td><?php echo $u['status'] === 'on' ? 'เปิดใช้งาน' : 'ปิดใช้งาน' ?></td>
+                            <td>
+                                <a href="user_edit.php?id=<?php echo $u['id'] ?>" class="btn btn-sm btn-outline-secondary">แก้ไข</a>
+                                <!--<a href="#" onclick="setEdit(<?php /*echo $u['id'] */?>);" class="btn btn-sm btn-outline-secondary">แก้ไข</a>-->
+                                <!--<a href="#" onclick="setDel(<?php /*echo $u['id'] */?>);" class="btn btn-sm btn-outline-secondary">ลบ</a>-->
+                            </td>
+                        </tr>
                     <?php
-                    $routes = [];
-                    if ($u['role'] === 'sales' && $u['salesperson_id']) {
-                        $routes = $db->query("SELECT DISTINCT r.route_name FROM customers c JOIN customer_routes r ON c.route_id = r.id WHERE c.salesperson_id = ? AND r.deleted_at IS NULL", $u['salesperson_id'])->fetchAll();
-                    }
-                    ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($u['name']) ?></td>
-                        <td><?php echo htmlspecialchars($u['nickname']) ?></td>
-                        <td><?php echo htmlspecialchars($u['phone']) ?></td>
-                        <td><?php echo htmlspecialchars($u['email']) ?></td>
-                        <td><?php echo htmlspecialchars(roleName($u['role'])) ?></td>
-                        <td>
-                            <?php
-                            if ($u['role'] === 'sales') {
-                                echo !empty($routes)
-                                    ? implode(', ', array_column($routes, 'route_name'))
-                                    : '<span class="text-muted">-</span>';
-                            } else {
-                                echo '-';
-                            }
-                            ?>
-                        </td>
-                        <td><?php echo $u['status'] === 'on' ? 'เปิดใช้งาน' : 'ปิดใช้งาน' ?></td>
-                        <td>
-                            <a href="user_edit.php?id=<?php echo $u['id'] ?>" class="btn btn-sm btn-outline-secondary">แก้ไข</a>
-                            <!--<a href="#" onclick="setEdit(<?php /*echo $u['id'] */?>);" class="btn btn-sm btn-outline-secondary">แก้ไข</a>-->
-                            <!--<a href="#" onclick="setDel(<?php /*echo $u['id'] */?>);" class="btn btn-sm btn-outline-secondary">ลบ</a>-->
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
+                        $i++;
+                        endforeach; }else{?>
+                        <tr><td colspan="9" class="text-danger text-center">ไม่มีข้อมูล</td></tr>
+                        <?php } ?>
                 </tbody>
             </table>
         </div>

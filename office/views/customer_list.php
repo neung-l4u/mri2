@@ -68,6 +68,7 @@ $customers = $db->query($sql, ...$params)->fetchAll();
             <table id="tableData" class="table table-borderless table-striped table-hover">
                 <thead class="table-dark">
                 <tr>
+                    <th>#</th>
                     <th>รหัสลูกค้า</th>
                     <th>ชื่อลูกค้า</th>
                     <th>เบอร์โทร</th>
@@ -82,9 +83,11 @@ $customers = $db->query($sql, ...$params)->fetchAll();
                 <tbody>
                 <?php
                 if(count($customers) > 0) {
+                    $i=1;
                     foreach ($customers as $c):
                         ?>
                         <tr>
+                            <td><?php echo $i; ?></td>
                             <td><?php echo htmlspecialchars($c['customer_code']) ?></td>
                             <td><?php echo htmlspecialchars($c['name']) ?></td>
                             <td><?php echo htmlspecialchars($c['phone']) ?></td>
@@ -98,9 +101,10 @@ $customers = $db->query($sql, ...$params)->fetchAll();
                             </td>
                         </tr>
                     <?php
+                    $i++;
                     endforeach;
                     }else{ ?>
-                    <tr><td colspan="9" style="text-align: center">-- ยังไม่มีลูกค้าในสายนี้ --</td></tr>
+                    <tr><td colspan="10" style="text-align: center">-- ยังไม่มีลูกค้าในสายนี้ --</td></tr>
                 <?php }//else ?>
                 </tbody>
             </table>

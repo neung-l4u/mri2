@@ -55,6 +55,7 @@ $routes = $db->query("SELECT r.*,
             <table id="tableData" class="table table-borderless table-striped table-hover">
                 <thead class="table-dark">
                 <tr>
+                    <th style="width: 5/5px">#</th>
                     <th style="width: 100px">รหัสสาย</th>
                     <th>ชื่อสาย</th>
                     <th style="width: 150px">เซลที่ดูแล</th>
@@ -64,19 +65,28 @@ $routes = $db->query("SELECT r.*,
                 </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($routes as $r): ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($r['route_code']) ?></td>
-                        <td><?php echo htmlspecialchars($r['route_name']) ?></td>
-                        <td><?php echo $r['salesperson_names'] ?: '-' ?></td>
-                        <td class="text-center"><?php echo $r['customer_count'] ?></td>
-                        <td><?php echo $r['status'] === 'on' ? 'เปิดใช้งาน' : 'ปิดใช้งาน' ?></td>
-                        <td style="text-align: right">
-                            <a href="customer_list.php?route_id=<?php echo $r['id'] ?>" class="btn btn-sm btn-outline-primary">ลูกค้า</a>
-                            <a href="route_edit.php?id=<?php echo $r['id'] ?>" class="btn btn-sm btn-outline-secondary">แก้ไข</a>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
+                <?php
+                    if (count($routes) > 0) {
+                        $i=1;
+                        foreach ($routes as $r): ?>
+                        <tr>
+                            <td><?php echo $i; ?></td>
+                            <td><?php echo htmlspecialchars($r['route_code']) ?></td>
+                            <td><?php echo htmlspecialchars($r['route_name']) ?></td>
+                            <td><?php echo $r['salesperson_names'] ?: '-' ?></td>
+                            <td class="text-center"><?php echo $r['customer_count'] ?></td>
+                            <td><?php echo $r['status'] === 'on' ? 'เปิดใช้งาน' : 'ปิดใช้งาน' ?></td>
+                            <td style="text-align: right">
+                                <a href="customer_list.php?route_id=<?php echo $r['id'] ?>" class="btn btn-sm btn-outline-primary">ลูกค้า</a>
+                                <a href="route_edit.php?id=<?php echo $r['id'] ?>" class="btn btn-sm btn-outline-secondary">แก้ไข</a>
+                            </td>
+                        </tr>
+                    <?php
+                        $i++;
+                        endforeach;
+                    }else{?>
+                        <tr><td colspan="7" class="text-danger text-center">ไม่มีข้อมูล</td></tr>
+                    <?php } ?>
                 </tbody>
             </table>
         </div>

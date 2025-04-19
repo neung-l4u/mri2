@@ -53,22 +53,24 @@ $banks = $db->query("SELECT * FROM banks WHERE deleted_at IS NULL ORDER BY bank_
                 </thead>
                 <tbody>
                 <?php
-                $i = 1;
-                foreach ($banks as $b):
-                    ?>
-                    <tr>
-                        <td style="text-align: center;"><?php echo $i; ?></td>
-                        <td><?php echo htmlspecialchars($b['bank_name']) ?></td>
-                        <td><?php echo $b['status'] === 'on' ? 'เปิดใช้งาน' : 'ปิดใช้งาน' ?></td>
-                        <td style="text-align: right;">
-                            <a href="bank_account_list.php?id=<?php echo $b['id'] ?>" class="btn btn-sm btn-outline-secondary">บัญชี</a>
-                            <a href="bank_edit.php?id=<?php echo $b['id'] ?>" class="btn btn-sm btn-outline-secondary">แก้ไข</a>
-                        </td>
-                    </tr>
-                <?php
-                $i++;
-                endforeach;
-                ?>
+                if(count($banks)>0){
+                    $i = 1;
+                    foreach ($banks as $b):
+                        ?>
+                        <tr>
+                            <td style="text-align: center;"><?php echo $i; ?></td>
+                            <td><?php echo htmlspecialchars($b['bank_name']) ?></td>
+                            <td><?php echo $b['status'] === 'on' ? 'เปิดใช้งาน' : 'ปิดใช้งาน' ?></td>
+                            <td style="text-align: right;">
+                                <a href="bank_account_list.php?id=<?php echo $b['id'] ?>" class="btn btn-sm btn-outline-secondary">บัญชี</a>
+                                <a href="bank_edit.php?id=<?php echo $b['id'] ?>" class="btn btn-sm btn-outline-secondary">แก้ไข</a>
+                            </td>
+                        </tr>
+                    <?php
+                    $i++;
+                    endforeach; }else{ ?>
+                    <tr><td colspan="4" class="text-danger text-center">ไม่มีข้อมูล</td></tr>
+                <?php } ?>
                 </tbody>
             </table>
         </div>
