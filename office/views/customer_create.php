@@ -124,9 +124,17 @@ $rand = $randTxt.'-'.$randNum;
                     <label class="form-label" for="email">อีเมล</label>
                     <input type="email" id="email" name="email" placeholder="mail@gmail.com" autocomplete="off" class="form-control">
                 </div>
+                <div class="col-md-4">
+                    <label class="form-label" for="lindID">ไอดีไลน์</label>
+                    <input type="text" id="lindID" name="lindID" placeholder="line ID" autocomplete="off" class="form-control">
+                </div>
                 <div class="col-md-12">
                     <label class="form-label" for="address">ที่อยู่</label>
                     <textarea name="address" id="address" placeholder="เช่น ตลาดมีน" class="form-control" rows="2"></textarea>
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label" for="remark">หมายเหตุ</label>
+                    <textarea name="remark" id="remark" placeholder="บันทึกช่วยจำ" class="form-control" rows="2"></textarea>
                 </div>
             </div>
             <h6 class="mb-3 text-info">รายละเอียดการเงิน</h6>

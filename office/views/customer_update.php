@@ -17,7 +17,9 @@ $name = !empty($_POST['name']) ? trim($_POST['name']) : null;
 $nickname = !empty($_POST['$nickname']) ? trim($_POST['$nickname']) : NULL;
 $phone = !empty($_POST['phone']) ? trim($_POST['phone']) : NULL;
 $email = !empty($_POST['email']) ? trim($_POST['email']) : NULL;
+$lindID = !empty($_POST['lindID']) ? trim($_POST['lindID']) : NULL;
 $address = !empty($_POST['address']) ? trim($_POST['address']) : NULL;
+$remark = !empty($_POST['remark']) ? trim($_POST['remark']) : NULL;
 $route_id = !empty($_POST['route_id']) ? trim($_POST['route_id']) : NULL;
 $salesperson_id = !empty($_POST['salesperson_id']) ? trim($_POST['salesperson_id']) : NULL;
 $payment_type = !empty($_POST['payment_type']) ? trim($_POST['payment_type']) : NULL;
@@ -36,7 +38,9 @@ $db->query("UPDATE customers SET
   nickname = ?,
   phone = ?,
   email = ?,
+  lineID = ?,
   address = ?,
+  remark = ?,
   route_id = ?,
   salesperson_id = ?,
   payment_type = ?,
@@ -46,7 +50,7 @@ $db->query("UPDATE customers SET
   updated_by = ?,
   updated_at = NOW()
   WHERE id = ?",
-    $name, $nickname, $phone, $email, $address, $route_id, $salesperson_id, $payment_type, $bank_account_id, $vat_type, $status, $updated_by, $id);
+    $name, $nickname, $phone, $email, $lindID, $address, $remark, $route_id, $salesperson_id, $payment_type, $bank_account_id, $vat_type, $status, $updated_by, $id);
 
 header("Location: customer_list.php?route_id=$route_id");
 exit;

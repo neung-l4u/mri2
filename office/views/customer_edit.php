@@ -122,9 +122,17 @@ $salespersons = $db->query("SELECT DISTINCT u.salesperson_id, u.name FROM users 
                     <label class="form-label" for="email">อีเมล</label>
                     <input type="email" name="email" id="email" class="form-control" value="<?php echo htmlspecialchars($customer['email']) ?>" autocomplete="off">
                 </div>
+                <div class="col-md-4">
+                    <label class="form-label" for="lindID">ไอดีไลน์</label>
+                    <input type="text" id="lindID" name="lindID" value="<?php echo htmlspecialchars($customer['lineID']) ?>" autocomplete="off" class="form-control">
+                </div>
                 <div class="col-md-12">
                     <label class="form-label" for="address">ที่อยู่</label>
                     <textarea name="address" id="address" class="form-control" rows="2"><?php echo htmlspecialchars($customer['address']) ?></textarea>
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label" for="remark">หมายเหตุ</label>
+                    <textarea name="remark" id="remark" placeholder="บันทึกช่วยจำ" class="form-control" rows="2"></textarea>
                 </div>
             </div>
 

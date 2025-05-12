@@ -72,10 +72,8 @@ $customers = $db->query($sql, ...$params)->fetchAll();
                     <th>รหัสลูกค้า</th>
                     <th>ชื่อลูกค้า</th>
                     <th>เบอร์โทร</th>
-                    <th>สาย</th>
                     <th>เซลที่ดูแล</th>
                     <th>การชำระ</th>
-                    <th>บัญชีรับโอน</th>
                     <th>สถานะ</th>
                     <th>จัดการ</th>
                 </tr>
@@ -91,10 +89,8 @@ $customers = $db->query($sql, ...$params)->fetchAll();
                             <td><?php echo showText($c['customer_code']) ?></td>
                             <td><?php echo showText($c['name']) ?></td>
                             <td><?php echo showText($c['phone']) ?></td>
-                            <td><?php echo showText($c['route_name']) ?></td>
                             <td><?php echo showText($c['salesperson_name']) ?></td>
                             <td><?php echo showText($c['payment_type']) ?></td>
-                            <td><?php echo showText($c['bank_name']) ?></td>
                             <td><?php echo $c['status'] === 'on' ? 'เปิดใช้งาน' : 'ปิดใช้งาน' ?></td>
                             <td>
                                 <a href="customer_edit.php?id=<?php echo $c['id'] ?>&route_id=<?php echo $route_id; ?>" class="btn btn-sm btn-outline-secondary">แก้ไข</a>
