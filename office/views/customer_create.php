@@ -84,7 +84,7 @@ $rand = $randTxt.'-'.$randNum;
                 </div>
                 <div class="col-md-6">
                     <label class="form-label" for="salesperson_id">เซลที่ดูแล <span class="red">*</span></label>
-                    <select name="salesperson_id" id="salesperson_id" class="form-select">
+                    <select name="salesperson_id" id="salesperson_id" class="form-select" required>
                         <option value="">-- เลือกเซล --</option>
                         <?php foreach ($salespersons as $s): ?>
                             <option value="<?php echo $s['salesperson_id'] ?>"><?php echo $s['name'] ?></option>
