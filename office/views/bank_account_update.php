@@ -12,10 +12,10 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'owner') {
 $id = $_POST['id'] ?? 0;
 $transaction_count = $_POST['transaction_count'] ?? 0;
 $bank_id = $_POST['bank_id'] ?? '';
-$display_name = $_POST['display_name'] ?? '';
-$account_name = $_POST['account_name'] ?? '';
-$account_number = $_POST['account_number'] ?? '';
-$branch = $_POST['branch'] ?? '';
+$display_name = trim($_POST['display_name'] ?? '-');
+$account_name = trim($_POST['account_name'] ?? '-');
+$account_number = trim($_POST['account_number'] ?? '-');
+$branch = trim($_POST['branch'] ?? '-');
 $opened_at = $_POST['opened_at'] ?? date('Y-m-d');
 $status = $_POST['status'] ?? 'active';
 $updated_by = $_SESSION['user_id'];

@@ -69,8 +69,12 @@ $categories = $db->query("SELECT id, name FROM product_categories WHERE deleted_
                 </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($products as $p): ?>
+                <?php
+                if(count($products)>0){
+                    $i=1;
+                    foreach ($products as $p): ?>
                     <tr>
+                        <td><?php echo $i; ?></td>
                         <td><?php echo htmlspecialchars($p['name']) ?></td>
                         <td><?php echo htmlspecialchars($p['category_name']) ?></td>
                         <td><?php echo number_format($p['package_size_grams']) ?></td>
@@ -79,7 +83,14 @@ $categories = $db->query("SELECT id, name FROM product_categories WHERE deleted_
                         <td><a href="product_edit.php?id=<?php echo $p['id'] ?>"  class="btn btn-sm btn-outline-secondary">แก้ไข</a></td>
 
                     </tr>
-                <?php endforeach; ?>
+                <?php
+                        $i++;
+                        endforeach;
+                } else{?>
+                <tr>
+                    <td colspan="7" class="text-center text-danger">ไม่มีข้อมูล</td>
+                </tr>
+                <?php } ?>
                 </tbody>
             </table>
         </div>

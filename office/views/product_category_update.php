@@ -10,7 +10,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'owner') {
 }
 
 $id = $_POST['id'] ?? 0;
-$name = $_POST['name'] ?? '';
+$name = trim($_POST['name'] ?? '-');
 $status = $_POST['status'] ?? 'on';
 $updated_by = $_SESSION['user_id'];
 

@@ -88,13 +88,13 @@ $customers = $db->query($sql, ...$params)->fetchAll();
                         ?>
                         <tr>
                             <td><?php echo $i; ?></td>
-                            <td><?php echo htmlspecialchars($c['customer_code']) ?></td>
-                            <td><?php echo htmlspecialchars($c['name']) ?></td>
-                            <td><?php echo htmlspecialchars($c['phone']) ?></td>
-                            <td><?php echo htmlspecialchars($c['route_name']) ?></td>
-                            <td><?php echo htmlspecialchars($c['salesperson_name']) ?></td>
-                            <td><?php echo htmlspecialchars($c['payment_type']) ?></td>
-                            <td><?php echo htmlspecialchars($c['bank_name']) ?></td>
+                            <td><?php echo showText($c['customer_code']) ?></td>
+                            <td><?php echo showText($c['name']) ?></td>
+                            <td><?php echo showText($c['phone']) ?></td>
+                            <td><?php echo showText($c['route_name']) ?></td>
+                            <td><?php echo showText($c['salesperson_name']) ?></td>
+                            <td><?php echo showText($c['payment_type']) ?></td>
+                            <td><?php echo showText($c['bank_name']) ?></td>
                             <td><?php echo $c['status'] === 'on' ? 'เปิดใช้งาน' : 'ปิดใช้งาน' ?></td>
                             <td>
                                 <a href="customer_edit.php?id=<?php echo $c['id'] ?>&route_id=<?php echo $route_id; ?>" class="btn btn-sm btn-outline-secondary">แก้ไข</a>
@@ -113,3 +113,11 @@ $customers = $db->query($sql, ...$params)->fetchAll();
 </div>
 </body>
 </html>
+
+<?php
+function showText($txt): string
+{
+    if (!empty($txt)) { return htmlspecialchars($txt); }
+    else { return "-"; }
+}//showText
+?>

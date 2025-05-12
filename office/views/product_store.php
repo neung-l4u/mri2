@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'owner') {
     exit;
 }
 
-$name = $_POST['name'] ?? '';
+$name = trim($_POST['name'] ?? '');
 $category_id = $_POST['category_id'] ?? '';
 $package_size_grams = $_POST['package_size_grams'] ?? 0;
 $default_price_per_pack = $_POST['default_price_per_pack'] ?? 0;

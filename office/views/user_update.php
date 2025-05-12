@@ -10,11 +10,11 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'owner') {
 }
 
 $id = $_POST['id'] ?? 0;
-$name = $_POST['name'] ?? '';
-$nickname = $_POST['nickname'] ?? '';
-$phone = $_POST['phone'] ?? '';
-$email = $_POST['email'] ?? '';
-$password = $_POST['password'] ?? '';
+$name = trim($_POST['name'] ?? '-');
+$nickname = trim($_POST['nickname'] ?? '-');
+$phone = trim($_POST['phone'] ?? '-');
+$email = trim($_POST['email'] ?? '-');
+$password = trim($_POST['password'] ?? '');
 $route_ids = $_POST['route_ids'] ?? [];
 $updated_by = $_SESSION['user_id'];
 

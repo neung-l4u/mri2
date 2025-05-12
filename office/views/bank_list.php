@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'owner') {
     exit;
 }
 
-$banks = $db->query("SELECT * FROM banks WHERE deleted_at IS NULL ORDER BY bank_name")->fetchAll();
+$banks = $db->query("SELECT b.id, b.bank_name, b.status, COUNT(ba.id) AS account_count FROM banks b LEFT JOIN bank_accounts ba ON ba.bank_id = b.id AND ba.deleted_at IS NULL WHERE b.status = 'on' GROUP BY b.id, b.bank_name, b.status ORDER BY b.bank_name;")->fetchAll();
 ?>
 <!doctype html>
 <html lang="th">
@@ -47,6 +47,7 @@ $banks = $db->query("SELECT * FROM banks WHERE deleted_at IS NULL ORDER BY bank_
                 <tr>
                     <th style="width: 30px; text-align: center;">#</th>
                     <th>ธนาคาร</th>
+                    <th style="width: 70px;">บัญชี</th>
                     <th style="width: 150px;">สถานะ</th>
                     <th style="width: 150px; text-align: center">จัดการ</th>
                 </tr>
@@ -60,6 +61,7 @@ $banks = $db->query("SELECT * FROM banks WHERE deleted_at IS NULL ORDER BY bank_
                         <tr>
                             <td style="text-align: center;"><?php echo $i; ?></td>
                             <td><?php echo htmlspecialchars($b['bank_name']) ?></td>
+                            <td class="text-right"><?php echo number_format($b['account_count']); ?></td>
                             <td><?php echo $b['status'] === 'on' ? 'เปิดใช้งาน' : 'ปิดใช้งาน' ?></td>
                             <td style="text-align: right;">
                                 <a href="bank_account_list.php?id=<?php echo $b['id'] ?>" class="btn btn-sm btn-outline-secondary">บัญชี</a>
@@ -69,7 +71,7 @@ $banks = $db->query("SELECT * FROM banks WHERE deleted_at IS NULL ORDER BY bank_
                     <?php
                     $i++;
                     endforeach; }else{ ?>
-                    <tr><td colspan="4" class="text-danger text-center">ไม่มีข้อมูล</td></tr>
+                    <tr><td colspan="5" class="text-danger text-center">ไม่มีข้อมูล</td></tr>
                 <?php } ?>
                 </tbody>
             </table>

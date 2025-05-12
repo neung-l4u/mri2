@@ -74,7 +74,7 @@ if (!$bank) {
                 </div>
                 <div class="col-md-6">
                     <label for="transaction_count" class="form-label">จำนวนธุรกรรม</label>
-                    <input id="transaction_count" type="number" step="1" min="1" name="transaction_count" class="form-control" value="<?php echo $bank['transaction_count'] ?>">
+                    <input id="transaction_count" type="number" step="1" min="0" name="transaction_count" class="form-control" value="<?php echo $bank['transaction_count'] ?>">
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">สถานะ</label>

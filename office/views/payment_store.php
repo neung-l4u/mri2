@@ -13,7 +13,7 @@ $user_id = $_SESSION['user_id'];
 $customer_id = $_POST['customer_id'] ?? null;
 $payment_date = $_POST['payment_date'] ?? date('Y-m-d');
 $method = $_POST['method'] ?? '';
-$note = $_POST['note'] ?? '';
+$note = trim($_POST['note'] ?? '');
 $bank_account_id = $_POST['bank_account_id'] ?? null;
 $sales_order_ids = $_POST['sales_order_ids'] ?? [];
 

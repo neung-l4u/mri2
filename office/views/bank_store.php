@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'owner') {
     exit;
 }
 
-$bank_name = $_POST['bank_name'] ?? '';
+$bank_name = trim($_POST['bank_name'] ?? '');
 $status = $_POST['status'] ?? 'off';
 $created_by = $_SESSION['user_id'];
 

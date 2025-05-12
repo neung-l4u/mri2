@@ -48,40 +48,40 @@ $total_salespersons = $db->query("SELECT COUNT(*) AS total FROM users WHERE role
     </div>
 
     <div class="mb-4">
-        <h4>สวัสดีคุณ <?php echo htmlspecialchars($name); ?> (เจ้าของ)</h4>
+        <h5>สวัสดีคุณ <?php echo htmlspecialchars($name); ?> (เจ้าของ)</h5>
     </div>
 
     <div class="row g-4 mb-4">
-        <div class="col-md-3">
+        <div class="col-md-6">
             <div class="bg-white p-3 rounded shadow-sm text-center">
                 <div class="text-muted small">ยอดขายวันนี้</div>
                 <h5 class="text-primary">฿ <?php echo number_format($sale_today['total'] ?? 0, 2); ?></h5>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-6">
             <div class="bg-white p-3 rounded shadow-sm text-center">
                 <div class="text-muted small">ยอดขายเดือนนี้</div>
                 <h5 class="text-success">฿ <?php echo number_format($sale_month['total'] ?? 0, 2); ?></h5>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-6">
             <div class="bg-white p-3 rounded shadow-sm text-center">
                 <div class="text-muted small">ยอดค้างชำระ</div>
                 <h5 class="text-danger">฿ <?php echo number_format($unpaid_total['total'] ?? 0, 2); ?></h5>
             </div>
         </div>
-        <div class="col-md-3">
+        <!--<div class="col-md-3">
             <div class="bg-white p-3 rounded shadow-sm text-center">
                 <div class="text-muted small">ลูกค้าทั้งหมด</div>
-                <h5><?php echo $total_customers['total']; ?> ราย</h5>
+                <h5><?php /*echo $total_customers['total']; */?> ราย</h5>
             </div>
         </div>
         <div class="col-md-3">
             <div class="bg-white p-3 rounded shadow-sm text-center">
                 <div class="text-muted small">จำนวนเซล</div>
-                <h5><?php echo $total_salespersons['total']; ?> คน</h5>
+                <h5><?php /*echo $total_salespersons['total']; */?> คน</h5>
             </div>
-        </div>
+        </div>-->
     </div>
 
     <!--<div class="d-flex flex-wrap gap-2">
