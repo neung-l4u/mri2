@@ -71,6 +71,20 @@ $categories = $db->query("SELECT id, name FROM product_categories WHERE deleted_
                         <?php endforeach; ?>
                     </select>
                 </div>
+                <div class="mb-3">
+                    <label for="unitCalculate" class="form-label">หน่วยการคำนวณ</label>
+                    <select class="form-select" id="unitCalculate" name="unitCalculate" required>
+                        <option value="weight" <?php echo ($level == 'down')?"selected":""; ?> >คำนวณตามน้ำหนัก (กก.)</option>
+                        <option value="piece" <?php echo ($level == 'up')?"selected":""; ?>>คำนวณตามจำนวน (ชิ้น)</option>
+                    </select>
+                    <div class="form-text">
+                        <?php if ($level == 'down') {
+                            echo 'สินค้า <strong>ตลาดล่าง</strong> ควรเลือกแบบน้ำหนัก';
+                        } else {
+                            echo 'สินค้า <strong>ตลาดบน</strong> ควรเลือกแบบจำนวนชิ้น';
+                        } ?>
+                    </div>
+                </div>
                 <div class="col-md-4">
                     <label class="form-label">ขนาดบรรจุ (กรัม)</label>
                     <input type="number" name="package_size_grams" class="form-control" required>

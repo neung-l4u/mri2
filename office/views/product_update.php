@@ -11,7 +11,9 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'owner') {
 
 $id = $_POST['id'] ?? 0;
 $name = trim($_POST['name'] ?? '-');
+$productLevel = $_POST['productLevel'] ?? 'down';
 $category_id = $_POST['category_id'] ?? '';
+$unitCalculate = $_POST['unitCalculate'] ?? 'weight';
 $package_size_grams = $_POST['package_size_grams'] ?? 0;
 $default_price_per_pack = $_POST['default_price_per_pack'] ?? 0;
 $status = $_POST['status'] ?? 'on';
@@ -23,14 +25,16 @@ if ($id == 0 || $name === '' || !$category_id || $package_size_grams <= 0) {
 
 $db->query("UPDATE products SET
   name = ?,
+  productLevel = ?,
   category_id = ?,
+  unitCalculate = ?,
   package_size_grams = ?,
   default_price_per_pack = ?,
   status = ?,
   updated_by = ?,
   updated_at = NOW()
   WHERE id = ?",
-    $name, $category_id, $package_size_grams, $default_price_per_pack, $status, $updated_by, $id);
+    $name, $productLevel, $category_id, $unitCalculate, $package_size_grams, $default_price_per_pack, $status, $updated_by, $id);
 
 header("Location: main.php?p=products");
 exit;

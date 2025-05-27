@@ -48,10 +48,17 @@ $categories = $db->query("SELECT id, name FROM product_categories WHERE deleted_
         <h4 class="mb-4">แก้ไขข้อมูลสินค้า</h4>
         <form method="POST" action="product_update.php">
             <input type="hidden" name="id" value="<?php echo $product['id'] ?>">
+            <div class="col-md-12">
+                <label for="productLevel" class="form-label">ระดับตลาด : </label>
+                <select name="productLevel" id="productLevel">
+                    <option value="down" <?php echo ($product['productLevel']=='down')?'selected':''; ?>>ตลาดล่าง</option>
+                    <option value="up" <?php echo ($product['productLevel']=='up')?'selected':''; ?>>ตลาดบน</option>
+                </select>
+            </div>
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label class="form-label">ชื่อสินค้า</label>
-                    <input type="text" name="name" class="form-control" value="<?php echo htmlspecialchars($product['name']) ?>" required>
+                    <label for="productName" class="form-label">ชื่อสินค้า</label>
+                    <input id="productName" type="text" name="name" class="form-control" value="<?php echo htmlspecialchars($product['name']) ?>" required>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">ประเภทสินค้า</label>
@@ -62,6 +69,20 @@ $categories = $db->query("SELECT id, name FROM product_categories WHERE deleted_
                             </option>
                         <?php endforeach; ?>
                     </select>
+                </div>
+                <div class="mb-3">
+                    <label for="unitCalculate" class="form-label">หน่วยการคำนวณ</label>
+                    <select class="form-select" id="unitCalculate" name="unitCalculate" required>
+                        <option value="weight" <?php echo ($product['unitCalculate'] == 'weight')?"selected":""; ?> >คำนวณตามน้ำหนัก (กก.)</option>
+                        <option value="piece" <?php echo ($product['unitCalculate'] == 'piece')?"selected":""; ?>>คำนวณตามจำนวน (ชิ้น)</option>
+                    </select>
+                    <div class="form-text">
+                        <?php if ($level == 'down') {
+                            echo 'สินค้า <strong>ตลาดล่าง</strong> ควรเลือกแบบน้ำหนัก';
+                        } else {
+                            echo 'สินค้า <strong>ตลาดบน</strong> ควรเลือกแบบจำนวนชิ้น';
+                        } ?>
+                    </div>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">ขนาดบรรจุ (กรัม)</label>
