@@ -30,6 +30,23 @@ if ($route_id !== '') {
 
 $sql .= " ORDER BY c.customer_code";
 $customers = $db->query($sql, ...$params)->fetchAll();
+
+$customer_ids = array_column($customers, 'id');
+$customCounts = [];
+if (!empty($customer_ids)) {
+    $placeholders = implode(',', array_fill(0, count($customer_ids), '?'));
+    $countData = $db->query(
+        "SELECT customer_id, COUNT(*) AS total
+         FROM customer_product_prices
+         WHERE customer_id IN ($placeholders) AND deleted_at IS NULL
+         GROUP BY customer_id",
+        ...$customer_ids
+    )->fetchAll();
+
+    foreach ($countData as $row) {
+        $customCounts[$row['customer_id']] = $row['total'];
+    }
+}
 ?>
 <!doctype html>
 <html lang="th">
@@ -72,12 +89,13 @@ $customers = $db->query($sql, ...$params)->fetchAll();
                     <th style="width: 50px;" class="text-center">#</th>
                     <th style="width: 100px;" class="text-center">รหัสลูกค้า</th>
                     <th>ชื่อลูกค้า</th>
-                    <th style="width: 150px;" class="text-center">เบอร์โทร</th>
+                    <th style="width: 250px;" class="text-center">เบอร์โทร</th>
                     <th style="width: 120px;" class="text-start">เซลที่ดูแล</th>
                     <th style="width: 100px;" class="text-center">การชำระ</th>
                     <th style="width: 80px;" class="text-center">ค่าส่ง</th>
                     <th style="width: 80px;" class="text-center">สถานะ</th>
-                    <th style="width: 120px;"></th>
+                    <th class="text-center" style="width: 80px;">สินค้า</th>
+                    <th style="width: 100px;"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -92,11 +110,16 @@ $customers = $db->query($sql, ...$params)->fetchAll();
                                 <i class="bi bi-upc-scan" title="รหัสลูกค้า"></i>  <small class="text-secondary"><?php echo showText($c['customer_code']) ?></small>
                             </td>
                             <td class="text-start"><?php echo showText($c['name']) ?></td>
-                            <td class="text-start"><i class="bi bi-telephone-fill"></i> <?php echo showText($c['phone']) ?></td>
+                            <td class="text-start"><i class="bi bi-telephone-fill"></i> <?php echo showTextSmall($c['phone']) ?></td>
                             <td><i class="bi bi-person-circle" title="เซล"></i> <?php echo showText($c['salesperson_name']) ?></td>
                             <td class="text-center"><?php echo showText($c['payment_type']) ?></td>
                             <td class="text-center"><?php echo $c['shipFee'] === '0' ? '<small class="text-secondary">ฟรี</small>':'<small class="text-primary">'.$c['shipFee'].' บาท</small>'; ?></td>
                             <td class="text-center"><?php echo $c['status'] === 'on' ? '<i class="bi bi-check text-success" title="เปิดใช้งาน"></i>' : '<i class="bi bi-x text-danger" title="ปิดใช้งาน"></i>' ?></td>
+                            <td class="text-center">
+                                <span onclick="toCustomerPrice(<?php echo $c['id'] ?>,<?php echo $route_id; ?>,<?php echo $c['id'] ?>)" class="badge bg-<?php echo isset($customCounts[$c['id']]) && $customCounts[$c['id']] > 0 ? 'info text-dark' : 'secondary'; ?>" style="cursor: pointer;">
+                                    <?php echo $customCounts[$c['id']] ?? 0; ?>
+                                </span>
+                            </td>
                             <td class="text-end pr-3">
                                 <a href="customer_products.php?id=<?php echo $c['id'] ?>&route_id=<?php echo $route_id; ?>&customer_id=<?php echo $c['id'] ?>" class="btn btn-sm btn-outline-secondary"><i class="bi bi-box" title="สินค้าของลูกค้าคนนี้"></i></i></a>
                                 <a href="customer_edit.php?id=<?php echo $c['id'] ?>&route_id=<?php echo $route_id; ?>" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil-fill" title="แก้ไข"></i></a>
@@ -115,11 +138,21 @@ $customers = $db->query($sql, ...$params)->fetchAll();
 </div>
 </body>
 </html>
-
+    <script>
+        function toCustomerPrice(id,route_id,customer_code){
+            window.location.href = `customer_products.php?id=${id}&route_id=${route_id}&customer_id=${customer_code}`;
+        }
+    </script>
 <?php
 function showText($txt): string
 {
     if (!empty($txt)) { return htmlspecialchars($txt); }
+    else { return "-"; }
+}//showText
+
+function showTextSmall($txt): string
+{
+    if (!empty($txt)) { return '<small>'.htmlspecialchars($txt).'</small>'; }
     else { return "-"; }
 }//showText
 ?>
