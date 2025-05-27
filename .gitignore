@@ -139,6 +139,7 @@ test
 upload
 /assets/db/initDB.php
 office/assets/db/initDB.php
+office/assets/libs/bootstrap-5.3.3-dist/bootstrap-icons-1.11.3
 
 .DS_Store
 
