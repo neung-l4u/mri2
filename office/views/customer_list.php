@@ -77,7 +77,7 @@ $customers = $db->query($sql, ...$params)->fetchAll();
                     <th style="width: 100px;" class="text-center">การชำระ</th>
                     <th style="width: 80px;" class="text-center">ค่าส่ง</th>
                     <th style="width: 80px;" class="text-center">สถานะ</th>
-                    <th style="width: 80px;"></th>
+                    <th style="width: 120px;"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -98,6 +98,7 @@ $customers = $db->query($sql, ...$params)->fetchAll();
                             <td class="text-center"><?php echo $c['shipFee'] === '0' ? '<small class="text-secondary">ฟรี</small>':'<small class="text-primary">'.$c['shipFee'].' บาท</small>'; ?></td>
                             <td class="text-center"><?php echo $c['status'] === 'on' ? '<i class="bi bi-check text-success" title="เปิดใช้งาน"></i>' : '<i class="bi bi-x text-danger" title="ปิดใช้งาน"></i>' ?></td>
                             <td class="text-end pr-3">
+                                <a href="customer_products.php?id=<?php echo $c['id'] ?>&route_id=<?php echo $route_id; ?>&customer_id=<?php echo $c['id'] ?>" class="btn btn-sm btn-outline-secondary"><i class="bi bi-box" title="สินค้าของลูกค้าคนนี้"></i></i></a>
                                 <a href="customer_edit.php?id=<?php echo $c['id'] ?>&route_id=<?php echo $route_id; ?>" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil-fill" title="แก้ไข"></i></a>
                             </td>
                         </tr>
