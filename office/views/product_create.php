@@ -9,6 +9,17 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'owner') {
     exit;
 }
 
+$level = $_GET['lvl'];
+if ($level == 'u')
+{
+    $level = 'up';
+    $levelTxt = 'ตลาดบน';
+}
+else{
+    $level = 'down';
+    $levelTxt = 'ตลาดล่าง';
+}
+
 $categories = $db->query("SELECT id, name FROM product_categories WHERE deleted_at IS NULL AND status = 'on' ORDER BY name")->fetchAll();
 ?>
 <!doctype html>
@@ -40,6 +51,13 @@ $categories = $db->query("SELECT id, name FROM product_categories WHERE deleted_
         <h4 class="mb-4">เพิ่มสินค้าใหม่</h4>
         <form method="POST" action="product_store.php">
             <div class="row g-3">
+                <div class="col-md-12">
+                    <label for="productLevel" class="form-label">ระดับตลาด : <span class="text-primary"><?php echo $levelTxt; ?></span></label>
+                    <select name="productLevel" id="productLevel" style="display: none;">
+                        <option value="down" <?php echo ($level=='down')?'selected':''; ?>>ตลาดล่าง</option>
+                        <option value="up" <?php echo ($level=='up')?'selected':''; ?>>ตลาดบน</option>
+                    </select>
+                </div>
                 <div class="col-md-6">
                     <label class="form-label">ชื่อสินค้า</label>
                     <input type="text" name="name" class="form-control" required>

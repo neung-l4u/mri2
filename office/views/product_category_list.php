@@ -41,7 +41,7 @@ $categories = $db->query("SELECT c.*,
 
     <div class="bg-white p-4 rounded shadow-sm">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="mb-0">รายการประเภทสินค้า</h4>
+            <h4 class="mb-0"><i class="bi bi-list-task"></i> รายการประเภทสินค้า</h4>
             <a href="product_category_create.php" class="btn btn-primary btn-sm">+ เพิ่มประเภทใหม่</a>
         </div>
 
@@ -49,21 +49,33 @@ $categories = $db->query("SELECT c.*,
             <table class="table table-borderless table-striped table-hover">
                 <thead class="table-dark">
                 <tr>
-                    <th style="width: 40%;">ชื่อหมวดหมู่</th>
-                    <th style="width: 10%;">จำนวนสินค้า</th>
-                    <th style="width: 40%;">สถานะ</th>
-                    <th style="width: 10%;">จัดการ</th>
+                    <th style="width: 50px;" class="text-center">#</th>
+                    <th>ชื่อหมวดหมู่</th>
+                    <th style="width: 150px;" class="text-center">จำนวนสินค้า</th>
+                    <th style="width: 80px;" class="text-center">สถานะ</th>
+                    <th style="width: 80px;"></th>
                 </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($categories as $cat): ?>
+                <?php
+                $i=1;
+                foreach ($categories as $cat):
+                    ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($cat['name']) ?></td>
-                        <td class="text-center"><?php echo $cat['product_count'] ?></td>
-                        <td><?php echo $cat['status'] === 'on' ? 'เปิดใช้งาน' : 'ปิดใช้งาน' ?></td>
-                        <td><a href="product_category_edit.php?id=<?php echo $cat['id'];?>" class="btn btn-sm btn-outline-secondary">แก้ไข</a></td>
+                        <td class="text-end"><?php echo $i; ?></td>
+                        <td class="text-start"><?php echo htmlspecialchars($cat['name']); ?></td>
+                        <td class="text-end">
+                            <a href="main.php?p=products&cateID=<?php echo $cat['id'];?>" style="text-decoration: none;"><?php echo number_format($cat['product_count']); ?></a> <i class="bi bi-menu-button-wide-fill"></i>
+                        </td>
+                        <td class="text-center"><?php echo $cat['status'] === 'on' ? '<i class="bi bi-check text-success" title="เปิดใช้งาน"></i>' : '<i class="bi bi-x text-danger" title="ปิดใช้งาน"></i>'; ?></td>
+                        <td class="text-end pr-3">
+                            <a href="product_category_edit.php?id=<?php echo $cat['id'];?>" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil-fill" title="แก้ไข"></i></a>
+                        </td>
                     </tr>
-                <?php endforeach; ?>
+                <?php
+                    $i++;
+                    endforeach;
+                ?>
                 </tbody>
             </table>
         </div>

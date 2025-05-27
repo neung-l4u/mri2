@@ -40,7 +40,7 @@ $users = $db->query("SELECT * FROM users WHERE deleted_at IS NULL ORDER BY role 
 
     <div class="bg-white p-4 rounded shadow-sm">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="mb-0">รายชื่อผู้ใช้งาน</h4>
+            <h4 class="mb-0"><i class="bi bi-people-fill"></i> รายชื่อผู้ใช้งาน</h4>
 <!--            <button id="btnModal" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#formModal">+ เพิ่มผู้ใช้งาน</button>-->
             <a id="btnModal" href="user_create.php" class="btn btn-primary">+ เพิ่มผู้ใช้งาน</a>
         </div>
@@ -49,15 +49,15 @@ $users = $db->query("SELECT * FROM users WHERE deleted_at IS NULL ORDER BY role 
             <table id="tableData" class="table table-borderless table-striped table-hover">
                 <thead class="table-dark">
                 <tr>
-                    <th>#</th>
+                    <th style="width: 50px;" class="text-center">#</th>
                     <th>ชื่อ</th>
-                    <th>ชื่อเล่น</th>
-                    <th>เบอร์โทร</th>
-                    <th>อีเมล</th>
-                    <th>บทบาท</th>
-                    <th>สายลูกค้า</th>
-                    <th>สถานะ</th>
-                    <th>จัดการ</th>
+                    <th style="width: 100px;" class="text-center">ชื่อเล่น</th>
+                    <th style="width: 200px;" class="text-center">เบอร์โทร</th>
+                    <th style="width: 250px;" class="text-center">อีเมล</th>
+                    <th style="width: 100px;" class="text-center">บทบาท</th>
+                    <!--<th>สายลูกค้า</th>-->
+                    <th style="width: 80px;" class="text-center">สถานะ</th>
+                    <th style="width: 80px;"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -72,26 +72,26 @@ $users = $db->query("SELECT * FROM users WHERE deleted_at IS NULL ORDER BY role 
                         }
                         ?>
                         <tr>
-                            <td><?php echo $i; ?></td>
-                            <td><?php echo htmlspecialchars($u['name']) ?></td>
-                            <td><?php echo htmlspecialchars($u['nickname']) ?></td>
-                            <td><?php echo htmlspecialchars($u['phone']) ?></td>
-                            <td><?php echo htmlspecialchars($u['email']) ?></td>
-                            <td><?php echo htmlspecialchars(roleName($u['role'])) ?></td>
-                            <td>
+                            <td class="text-end"><?php echo $i; ?></td>
+                            <td class="text-start"><?php echo htmlspecialchars($u['name']) ?></td>
+                            <td class="text-start"><?php echo htmlspecialchars($u['nickname']) ?></td>
+                            <td class="text-start"><i class="bi bi-telephone-fill"></i> <?php echo htmlspecialchars($u['phone']) ?></td>
+                            <td class="text-start"><i class="bi bi-envelope-fill"></i> <?php echo htmlspecialchars($u['email']) ?></td>
+                            <td class="text-start"><i class="bi bi-file-person"></i> <?php echo htmlspecialchars(roleName($u['role'])) ?></td>
+                           <!-- <td>
                                 <?php
-                                if ($u['role'] === 'sales') {
+/*                                if ($u['role'] === 'sales') {
                                     echo !empty($routes)
                                         ? implode(', ', array_column($routes, 'route_name'))
                                         : '<span class="text-muted">-</span>';
                                 } else {
                                     echo '-';
                                 }
-                                ?>
-                            </td>
-                            <td><?php echo $u['status'] === 'on' ? 'เปิดใช้งาน' : 'ปิดใช้งาน' ?></td>
-                            <td>
-                                <a href="user_edit.php?id=<?php echo $u['id'] ?>" class="btn btn-sm btn-outline-secondary">แก้ไข</a>
+                                */?>
+                            </td>-->
+                            <td class="text-center"><?php echo $u['status'] === 'on' ? '<i class="bi bi-check text-success" title="เปิดใช้งาน"></i>' : '<i class="bi bi-x text-danger" title="ปิดใช้งาน"></i>' ?></td>
+                            <td class="text-end pr-3">
+                                <a href="user_edit.php?id=<?php echo $u['id'] ?>" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil-fill" title="แก้ไข"></i></a>
                                 <!--<a href="#" onclick="setEdit(<?php /*echo $u['id'] */?>);" class="btn btn-sm btn-outline-secondary">แก้ไข</a>-->
                                 <!--<a href="#" onclick="setDel(<?php /*echo $u['id'] */?>);" class="btn btn-sm btn-outline-secondary">ลบ</a>-->
                             </td>

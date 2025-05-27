@@ -15,6 +15,8 @@ if (!$product) {
     exit('ไม่พบข้อมูลสินค้า');
 }
 
+
+
 $categories = $db->query("SELECT id, name FROM product_categories WHERE deleted_at IS NULL AND status = 'on' ORDER BY name")->fetchAll();
 ?>
 <!doctype html>

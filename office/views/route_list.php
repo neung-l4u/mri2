@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'owner') {
     exit;
 }
 
-$routes = $db->query("SELECT r.*, 
+$routesDown = $db->query("SELECT r.*, 
   (SELECT COUNT(*) FROM customers c WHERE c.route_id = r.id AND c.deleted_at IS NULL) AS customer_count,
   (
     SELECT GROUP_CONCAT(DISTINCT u.name SEPARATOR ', ')
@@ -18,7 +18,19 @@ $routes = $db->query("SELECT r.*,
     WHERE c.route_id = r.id AND u.deleted_at IS NULL
   ) AS salesperson_names
   FROM customer_routes r
-  WHERE r.deleted_at IS NULL
+  WHERE r.deleted_at IS NULL AND r.route_level = 'down'
+  ORDER BY r.route_code")->fetchAll();
+
+$routesUp = $db->query("SELECT r.*, 
+  (SELECT COUNT(*) FROM customers c WHERE c.route_id = r.id AND c.deleted_at IS NULL) AS customer_count,
+  (
+    SELECT GROUP_CONCAT(DISTINCT u.name SEPARATOR ', ')
+    FROM customers c
+    JOIN users u ON u.salesperson_id = c.salesperson_id
+    WHERE c.route_id = r.id AND u.deleted_at IS NULL
+  ) AS salesperson_names
+  FROM customer_routes r
+  WHERE r.deleted_at IS NULL AND r.route_level = 'up'
   ORDER BY r.route_code")->fetchAll();
 ?>
 <!doctype html>
@@ -47,38 +59,42 @@ $routes = $db->query("SELECT r.*,
 
     <div class="bg-white p-4 rounded shadow-sm">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="mb-0">รายการสายลูกค้า</h4>
-            <a href="route_create.php" class="btn btn-primary btn-sm">+ เพิ่มสายใหม่</a>
+            <h4 class="mb-0"><i class="bi bi-arrow-down-square-fill"></i> สายลูกค้า (ตลาดล่าง)</h4>
+            <a href="route_create.php?lvl=d" class="btn btn-primary btn-sm">+ เพิ่มสายใหม่</a>
         </div>
 
         <div class="table-responsive">
             <table id="tableData" class="table table-borderless table-striped table-hover">
                 <thead class="table-dark">
                 <tr>
-                    <th style="width: 5/5px">#</th>
-                    <th style="width: 100px">รหัสสาย</th>
-                    <th>ชื่อสาย</th>
-                    <th style="width: 150px">เซลที่ดูแล</th>
-                    <th style="width: 120px">จำนวนลูกค้า</th>
-                    <th style="width: 90px">สถานะ</th>
-                    <th style="width: 200px; text-align: center">จัดการ</th>
+                    <th style="width: 50px;" class="text-center">#</th>
+                    <th style="width: 100px;" class="text-center">รหัสสาย</th>
+                    <th class="text-start">ชื่อสาย</th>
+                    <th style="width: 150px;" class="text-start">เซลที่ดูแล</th>
+                    <th style="width: 120px;" class="text-center">จำนวนลูกค้า</th>
+                    <th style="width: 80px;" class="text-center">สถานะ</th>
+                    <th style="width: 120px;"></th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php
-                    if (count($routes) > 0) {
+                    if (count($routesDown) > 0) {
                         $i=1;
-                        foreach ($routes as $r): ?>
+                        foreach ($routesDown as $r): ?>
                         <tr>
-                            <td><?php echo $i; ?></td>
-                            <td><?php echo htmlspecialchars($r['route_code']) ?></td>
+                            <td class="text-end"><?php echo $i; ?></td>
+                            <td>
+                                <i class="bi bi-upc-scan" title="รหัสสาย"></i>  <small class="text-secondary"><?php echo htmlspecialchars($r['route_code']) ?></small>
+                            </td>
                             <td><?php echo htmlspecialchars($r['route_name']) ?></td>
-                            <td><?php echo $r['salesperson_names'] ?: '-' ?></td>
-                            <td class="text-center"><?php echo $r['customer_count'] ?></td>
-                            <td><?php echo $r['status'] === 'on' ? 'เปิดใช้งาน' : 'ปิดใช้งาน' ?></td>
-                            <td style="text-align: right">
-                                <a href="customer_list.php?route_id=<?php echo $r['id'] ?>" class="btn btn-sm btn-outline-primary">ลูกค้า</a>
-                                <a href="route_edit.php?id=<?php echo $r['id'] ?>" class="btn btn-sm btn-outline-secondary">แก้ไข</a>
+                            <td><i class="bi bi-person-circle" title="เซล"></i> <?php echo $r['salesperson_names'] ?: '-' ?></td>
+                            <td class="text-end">
+                                <a href="customer_list.php?route_id=<?php echo $r['id'] ?>" class="text-primary" style="text-decoration: none;"><?php echo number_format($r['customer_count']); ?></a> <i class="bi bi-person" title="จำนวนลูกค้า"></i>
+                            </td>
+                            <td class="text-center"><?php echo $r['status'] === 'on' ? '<i class="bi bi-check text-success" title="เปิดใช้งาน"></i>' : '<i class="bi bi-x text-danger" title="ปิดใช้งาน"></i>' ?></td>
+                            <td class="text-end pr-3">
+                                <a href="customer_list.php?route_id=<?php echo $r['id'] ?>" class="btn btn-sm btn-outline-primary"><i class="bi bi-people-fill" title="ลูกค้า"></i></a>
+                                <a href="route_edit.php?id=<?php echo $r['id'] ?>" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil-fill" title="แก้ไข"></i></a>
                             </td>
                         </tr>
                     <?php
@@ -91,6 +107,61 @@ $routes = $db->query("SELECT r.*,
             </table>
         </div>
     </div>
+
+
+    <div class="bg-white p-4 rounded shadow-sm mt-3">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="mb-0"><i class="bi bi-arrow-up-square-fill"></i> สายลูกค้า (ตลาดบน)</h4>
+            <a href="route_create.php?lvl=u" class="btn btn-primary btn-sm">+ เพิ่มสายใหม่</a>
+        </div>
+
+        <div class="table-responsive">
+            <table id="tableData" class="table table-borderless table-striped table-hover">
+                <thead class="table-dark">
+                <tr>
+                    <th style="width: 50px;" class="text-center">#</th>
+                    <th style="width: 100px;" class="text-center">รหัสสาย</th>
+                    <th class="text-start">ชื่อสาย</th>
+                    <th style="width: 150px;" class="text-start">เซลที่ดูแล</th>
+                    <th style="width: 120px;" class="text-center">จำนวนลูกค้า</th>
+                    <th style="width: 80px;" class="text-center">สถานะ</th>
+                    <th style="width: 120px;"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                if (count($routesUp) > 0) {
+                    $i=1;
+                    foreach ($routesUp as $u): ?>
+                        <tr>
+                            <td class="text-end"><?php echo $i; ?></td>
+                            <td>
+                                <i class="bi bi-upc-scan" title="รหัสสาย"></i> <small class="text-secondary"><?php echo htmlspecialchars($u['route_code']) ?></small>
+                            </td>
+                            <td><?php echo htmlspecialchars($u['route_name']) ?></td>
+                            <td><i class="bi bi-person-circle" title="เซล"></i> <?php echo $u['salesperson_names'] ?: '-' ?></td>
+                            <td class="text-end">
+                                <a href="customer_list.php?route_id=<?php echo $u['id'] ?>" class="text-primary" style="text-decoration: none;"><?php echo number_format($u['customer_count']); ?></a> <i class="bi bi-person" title="จำนวนลูกค้า"></i>
+                            </td>
+                            <td class="text-center"><?php echo $u['status'] === 'on' ? '<i class="bi bi-check text-success" title="เปิดใช้งาน"></i>' : '<i class="bi bi-x text-danger" title="ปิดใช้งาน"></i>' ?></td>
+                            <td class="text-end pr-3">
+                                <a href="customer_list.php?route_id=<?php echo $u['id'] ?>" class="btn btn-sm btn-outline-primary"><i class="bi bi-people-fill" title="ลูกค้า"></i></a>
+                                <a href="route_edit.php?id=<?php echo $u['id'] ?>" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil-fill" title="แก้ไข"></i></a>
+                            </td>
+                        </tr>
+                        <?php
+                        $i++;
+                    endforeach;
+                }else{?>
+                    <tr><td colspan="7" class="text-danger text-center">ไม่มีข้อมูล</td></tr>
+                <?php } ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    
+    
 </div>
 </body>
 </html>

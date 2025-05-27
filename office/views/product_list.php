@@ -11,10 +11,16 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'owner') {
     exit;
 }
 
-$products = $db->query("SELECT p.*, c.name AS category_name
+$productsDown = $db->query("SELECT p.*, c.name AS category_name, p.unitCalculate 
                         FROM products p
                         LEFT JOIN product_categories c ON p.category_id = c.id
-                        WHERE p.deleted_at IS NULL
+                        WHERE p.deleted_at IS NULL AND p.productLevel = 'down'
+                        ORDER BY c.name, p.name")->fetchAll();
+
+$productsUp = $db->query("SELECT p.*, c.name AS category_name, p.unitCalculate 
+                        FROM products p
+                        LEFT JOIN product_categories c ON p.category_id = c.id
+                        WHERE p.deleted_at IS NULL AND p.productLevel = 'up'
                         ORDER BY c.name, p.name")->fetchAll();
 
 $categories = $db->query("SELECT id, name FROM product_categories WHERE deleted_at IS NULL AND status = 'on' ORDER BY name")->fetchAll();
@@ -48,8 +54,8 @@ $categories = $db->query("SELECT id, name FROM product_categories WHERE deleted_
 
     <div class="bg-white p-4 rounded shadow-sm">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="mb-0">รายการสินค้า</h4>
-            <a href="product_create.php" class="btn btn-primary btn-sm">+ เพิ่มสินค้าใหม่</a>
+            <h4 class="mb-0"><i class="bi bi-arrow-down-square-fill"></i> รายการสินค้า (ตลาดล่าง)</h4>
+            <a href="product_create.php?lvl=d" class="btn btn-primary btn-sm">+ เพิ่มสินค้าใหม่</a>
 <!--            <button id="btnModal" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#formModal">-->
 <!--                -->
 <!--                + เพิ่มสินค้า-->
@@ -60,28 +66,29 @@ $categories = $db->query("SELECT id, name FROM product_categories WHERE deleted_
             <table class="table table-borderless table-striped table-hover">
                 <thead class="table-dark">
                 <tr>
-                    <th>ชื่อสินค้า</th>
-                    <th>ประเภท</th>
-                    <th>ขนาดบรรจุ (กรัม)</th>
-                    <th class="text-end">ราคาตั้งต้น (บาท)</th>
-                    <th>สถานะ</th>
-                    <th>จัดการ</th>
-                </tr>
+                    <th style="width: 50px;" class="text-center">#</th>
+                    <th class="text-center">ประเภท: ชื่อสินค้า</th>
+                    <th style="width: 150px;" class="text-end">ขนาด</th>
+                    <th style="width: 80px;" class="text-center">หน่วย</th>
+                    <th style="width: 150px;" class="text-end">ราคาตั้งต้น (บาท)</th>
+                    <th style="width: 80px;" class="text-center">สถานะ</th>
+                    <th style="width: 80px;"></th>
                 </thead>
                 <tbody>
                 <?php
-                if(count($products)>0){
+                if(count($productsDown)>0){
                     $i=1;
-                    foreach ($products as $p): ?>
+                    foreach ($productsDown as $p): ?>
                     <tr>
-                        <td><?php echo $i; ?></td>
-                        <td><?php echo htmlspecialchars($p['name']) ?></td>
-                        <td><?php echo htmlspecialchars($p['category_name']) ?></td>
-                        <td><?php echo number_format($p['package_size_grams']) ?></td>
+                        <td class="text-end"><?php echo $i; ?></td>
+                        <td><?php echo '<small class="text-secondary">'.htmlspecialchars($p['category_name']).'</small>: '.htmlspecialchars($p['name']); ?></td>
+                        <td class="text-end"><?php echo number_format($p['package_size_grams']) ?> กรัม</td>
+                        <td class="text-center"><?php echo $p['unitCalculate'] === 'weight' ? 'กิโล' : 'ถุง'; ?></td>
                         <td class="text-end">฿<?php echo number_format($p['default_price_per_pack'], 2) ?></td>
-                        <td><?php echo $p['status'] === 'on' ? 'เปิดใช้งาน' : 'ปิดใช้งาน' ?></td>
-                        <td><a href="product_edit.php?id=<?php echo $p['id'] ?>"  class="btn btn-sm btn-outline-secondary">แก้ไข</a></td>
-
+                        <td class="text-center"><?php echo $p['status'] === 'on' ? '<i class="bi bi-check text-success" title="เปิดใช้งาน"></i>' : '<i class="bi bi-x text-danger" title="ปิดใช้งาน"></i>' ?></td>
+                        <td class="text-end pr-3">
+                            <a href="product_edit.php?id=<?php echo $p['id'] ?>"  class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil-fill" title="แก้ไข"></i></a>
+                        </td>
                     </tr>
                 <?php
                         $i++;
@@ -94,63 +101,58 @@ $categories = $db->query("SELECT id, name FROM product_categories WHERE deleted_
                 </tbody>
             </table>
         </div>
+    </div>
 
-        <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="formModalLabel">เพิ่มสินค้า</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+    <div class="bg-white p-4 rounded shadow-sm mt-3">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="mb-0"><i class="bi bi-arrow-up-square-fill"></i> รายการสินค้า (ตลาดบน)</h4>
+            <a href="product_create.php?lvl=u" class="btn btn-primary btn-sm">+ เพิ่มสินค้าใหม่</a>
+            <!--            <button id="btnModal" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#formModal">-->
+            <!--                -->
+            <!--                + เพิ่มสินค้า-->
+            <!--            </button>-->
+        </div>
 
-                        </button>
-                    </div>
-                    <div class="modal-body">
-
-                        <div class="d-flex flex-column">
-
-                            <form method="POST" action="product_store.php">
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label">ชื่อสินค้า</label>
-                                        <input type="text" id="name" name="name" class="form-control" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">ประเภทสินค้า</label>
-                                        <select id="category_id" name="category_id" class="form-select" required>
-                                            <option value="">-- เลือกประเภท --</option>
-                                            <?php foreach ($categories as $c): ?>
-                                                <option value="<?php echo $c['id'] ?>"><?php echo $c['name'] ?></option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="form-label">ขนาดบรรจุ (กรัม)</label>
-                                        <input type="number" name="package_size_grams" class="form-control" required>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="form-label">ราคาตั้งต้นต่อถุง (บาท)</label>
-                                        <input type="number" name="default_price_per_pack" class="form-control" step="0.01" required>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="form-label">สถานะ</label>
-                                        <select id="status" name="status" class="form-select">
-                                            <option value="on" selected>เปิดใช้งาน</option>
-                                            <option value="off">ปิดใช้งาน</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-12 text-end">
-                                        <button type="submit" class="btn btn-success" onclick="formSave()">บันทึกสินค้า</button>
-                                        <input type="hidden" id="formAction" value="add">
-                                        <input type="hidden" id="userID" value="<?php echo $myID; ?>">
-                                    </div>
-                                </div>
-                            </form>
-                            </div>
-                        </div>
-                    </div>
-                </div> <!-- modal-body -->
-            </div>
+        <div class="table-responsive">
+            <table class="table table-borderless table-striped table-hover">
+                <thead class="table-dark">
+                <tr>
+                    <th style="width: 50px;" class="text-center">#</th>
+                    <th class="text-center">ประเภท: ชื่อสินค้า</th>
+                    <th style="width: 150px;" class="text-end">ขนาด</th>
+                    <th style="width: 80px;" class="text-center">หน่วย</th>
+                    <th style="width: 150px;" class="text-end">ราคาตั้งต้น (บาท)</th>
+                    <th style="width: 80px;" class="text-center">สถานะ</th>
+                    <th style="width: 80px;"></th>
+                </thead>
+                <tbody>
+                <?php
+                if(count($productsUp)>0){
+                    $i=1;
+                    foreach ($productsUp as $u): ?>
+                        <tr>
+                            <td class="text-end"><?php echo $i; ?></td>
+                            <td><?php echo '<small class="text-secondary">'.htmlspecialchars($u['category_name']).'</small>: '.htmlspecialchars($u['name']); ?></td>
+                            <td class="text-end"><?php echo number_format($u['package_size_grams']) ?> กรัม</td>
+                            <td class="text-center"><?php echo $u['unitCalculate'] === 'weight' ? 'กิโล' : 'ถุง'; ?></td>
+                            <td class="text-end">฿<?php echo number_format($u['default_price_per_pack'], 2) ?></td>
+                            <td class="text-center"><?php echo $u['status'] === 'on' ? '<i class="bi bi-check text-success" title="เปิดใช้งาน"></i>' : '<i class="bi bi-x text-danger" title="ปิดใช้งาน"></i>' ?></td>
+                            <td class="text-end pr-3">
+                                <a href="product_edit.php?id=<?php echo $u['id'] ?>"  class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil-fill" title="แก้ไข"></i></a>
+                            </td>
+                        </tr>
+                        <?php
+                        $i++;
+                    endforeach;
+                } else{?>
+                    <tr>
+                        <td colspan="7" class="text-center text-danger">ไม่มีข้อมูล</td>
+                    </tr>
+                <?php } ?>
+                </tbody>
+            </table>
         </div>
     </div>
+</div>
 </body>
 </html>

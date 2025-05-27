@@ -28,7 +28,7 @@ if ($route_id !== '') {
     $params[] = $route_id;
 }
 
-$sql .= " ORDER BY c.name";
+$sql .= " ORDER BY c.customer_code";
 $customers = $db->query($sql, ...$params)->fetchAll();
 ?>
 <!doctype html>
@@ -38,6 +38,7 @@ $customers = $db->query($sql, ...$params)->fetchAll();
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ลูกค้าในสาย<?php echo $route ? ' ' . htmlspecialchars($route['route_name']) : '' ?></title>
     <link href="../assets/libs/bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/libs/bootstrap-5.3.3-dist/bootstrap-icons-1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body class="bg-light">
 <div class="container py-5">
@@ -52,7 +53,7 @@ $customers = $db->query($sql, ...$params)->fetchAll();
                 </li>
                 <li class="breadcrumb-item"><a href="main.php?p=lines">สายลูกค้า</a></li>
                 <li class="breadcrumb-item active" aria-current="page">
-                    ลูกค้า<?php echo $route ? 'ในสาย ' . htmlspecialchars($route['route_name']) : '' ?>
+                    <?php echo $route ? htmlspecialchars($route['route_code'].': '.$route['route_name']) : '' ?>
                 </li>
             </ol>
         </nav>
@@ -60,7 +61,7 @@ $customers = $db->query($sql, ...$params)->fetchAll();
 
     <div class="bg-white p-4 rounded shadow-sm">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="mb-0">รายชื่อลูกค้า<?php echo $route ? 'ในสาย ' . htmlspecialchars($route['route_name']) : '' ?></h4>
+            <h4 class="mb-0"><i class="bi bi-person-vcard-fill"></i> ลูกค้าในสาย <span class="text-info"> <?php echo $route ? htmlspecialchars($route['route_code'].': '.$route['route_name']) : '' ?></span></h4>
             <a href="customer_create.php<?php echo $route ? '?route_id=' . $route['id'] : '' ?>" class="btn btn-primary btn-sm">+ เพิ่มลูกค้า</a>
         </div>
 
@@ -68,14 +69,15 @@ $customers = $db->query($sql, ...$params)->fetchAll();
             <table id="tableData" class="table table-borderless table-striped table-hover">
                 <thead class="table-dark">
                 <tr>
-                    <th>#</th>
-                    <th>รหัสลูกค้า</th>
+                    <th style="width: 50px;" class="text-center">#</th>
+                    <th style="width: 100px;" class="text-center">รหัสลูกค้า</th>
                     <th>ชื่อลูกค้า</th>
-                    <th>เบอร์โทร</th>
-                    <th>เซลที่ดูแล</th>
-                    <th>การชำระ</th>
-                    <th>สถานะ</th>
-                    <th>จัดการ</th>
+                    <th style="width: 150px;" class="text-center">เบอร์โทร</th>
+                    <th style="width: 120px;" class="text-start">เซลที่ดูแล</th>
+                    <th style="width: 100px;" class="text-center">การชำระ</th>
+                    <th style="width: 80px;" class="text-center">ค่าส่ง</th>
+                    <th style="width: 80px;" class="text-center">สถานะ</th>
+                    <th style="width: 80px;"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -85,15 +87,18 @@ $customers = $db->query($sql, ...$params)->fetchAll();
                     foreach ($customers as $c):
                         ?>
                         <tr>
-                            <td><?php echo $i; ?></td>
-                            <td><?php echo showText($c['customer_code']) ?></td>
-                            <td><?php echo showText($c['name']) ?></td>
-                            <td><?php echo showText($c['phone']) ?></td>
-                            <td><?php echo showText($c['salesperson_name']) ?></td>
-                            <td><?php echo showText($c['payment_type']) ?></td>
-                            <td><?php echo $c['status'] === 'on' ? 'เปิดใช้งาน' : 'ปิดใช้งาน' ?></td>
+                            <td class="text-end"><?php echo $i; ?></td>
                             <td>
-                                <a href="customer_edit.php?id=<?php echo $c['id'] ?>&route_id=<?php echo $route_id; ?>" class="btn btn-sm btn-outline-secondary">แก้ไข</a>
+                                <i class="bi bi-upc-scan" title="รหัสลูกค้า"></i>  <small class="text-secondary"><?php echo showText($c['customer_code']) ?></small>
+                            </td>
+                            <td class="text-start"><?php echo showText($c['name']) ?></td>
+                            <td class="text-start"><i class="bi bi-telephone-fill"></i> <?php echo showText($c['phone']) ?></td>
+                            <td><i class="bi bi-person-circle" title="เซล"></i> <?php echo showText($c['salesperson_name']) ?></td>
+                            <td class="text-center"><?php echo showText($c['payment_type']) ?></td>
+                            <td class="text-center"><?php echo $c['shipFee'] === '0' ? '<small class="text-secondary">ฟรี</small>':'<small class="text-primary">'.$c['shipFee'].' บาท</small>'; ?></td>
+                            <td class="text-center"><?php echo $c['status'] === 'on' ? '<i class="bi bi-check text-success" title="เปิดใช้งาน"></i>' : '<i class="bi bi-x text-danger" title="ปิดใช้งาน"></i>' ?></td>
+                            <td class="text-end pr-3">
+                                <a href="customer_edit.php?id=<?php echo $c['id'] ?>&route_id=<?php echo $route_id; ?>" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil-fill" title="แก้ไข"></i></a>
                             </td>
                         </tr>
                     <?php

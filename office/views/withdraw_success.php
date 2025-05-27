@@ -2,6 +2,7 @@
 session_start();
 include_once('../assets/db/db.php');
 include_once('../assets/db/initDB.php');
+global $db;
 
 $order_id = $_GET['order_id'] ?? 0;
 if (!$order_id) {
@@ -12,8 +13,6 @@ if (!$order_id) {
 // ดึงข้อมูลหัวบิล
 $order = $db->query("SELECT o.id, o.withdrawal_date, o.total_amount, c.customer_code, c.name AS customer_name, s.name AS salesperson_name
                      FROM sales_orders o
-                     JOIN customers c ON o.customer_id = c.id
-                     JOIN salespersons s ON o.salesperson_id = s.id
                      WHERE o.id = ?", $order_id)->fetchArray();
 
 if (!$order) {

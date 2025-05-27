@@ -37,7 +37,7 @@ $banks = $db->query("SELECT b.id, b.bank_name, b.status, COUNT(ba.id) AS account
 
     <div class="bg-white p-4 rounded shadow-sm">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="mb-0">รายการธนาคาร</h4>
+            <h4 class="mb-0"><i class="bi bi-person-vcard-fill"></i> รายการธนาคาร</h4>
             <a href="bank_create.php" class="btn btn-primary btn-sm">+ เพิ่มธนาคารใหม่</a>
         </div>
 
@@ -47,9 +47,9 @@ $banks = $db->query("SELECT b.id, b.bank_name, b.status, COUNT(ba.id) AS account
                 <tr>
                     <th style="width: 30px; text-align: center;">#</th>
                     <th>ธนาคาร</th>
-                    <th style="width: 70px;">บัญชี</th>
-                    <th style="width: 150px;">สถานะ</th>
-                    <th style="width: 150px; text-align: center">จัดการ</th>
+                    <th style="width: 80px;">บัญชี</th>
+                    <th style="width: 80px;">สถานะ</th>
+                    <th style="width: 120px;"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -59,13 +59,15 @@ $banks = $db->query("SELECT b.id, b.bank_name, b.status, COUNT(ba.id) AS account
                     foreach ($banks as $b):
                         ?>
                         <tr>
-                            <td style="text-align: center;"><?php echo $i; ?></td>
-                            <td><?php echo htmlspecialchars($b['bank_name']) ?></td>
-                            <td class="text-right"><?php echo number_format($b['account_count']); ?></td>
-                            <td><?php echo $b['status'] === 'on' ? 'เปิดใช้งาน' : 'ปิดใช้งาน' ?></td>
-                            <td style="text-align: right;">
-                                <a href="bank_account_list.php?id=<?php echo $b['id'] ?>" class="btn btn-sm btn-outline-secondary">บัญชี</a>
-                                <a href="bank_edit.php?id=<?php echo $b['id'] ?>" class="btn btn-sm btn-outline-secondary">แก้ไข</a>
+                            <td class="text-end"><?php echo $i; ?></td>
+                            <td class="text-start"><?php echo htmlspecialchars($b['bank_name']) ?></td>
+                            <td class="text-end">
+                                <a href="bank_account_list.php?id=<?php echo $b['id'] ?>" class="text-primary" style="text-decoration: none;"><?php echo number_format($b['account_count']); ?></a> <i class="bi bi-person-badge"></i>
+                            </td>
+                            <td class="text-center"><?php echo $b['status'] === 'on' ? '<i class="bi bi-check text-success" title="เปิดใช้งาน"></i>' : '<i class="bi bi-x text-danger" title="ปิดใช้งาน"></i>'; ?></td>
+                            <td class="text-end">
+                                <a href="bank_account_list.php?id=<?php echo $b['id'] ?>" class="btn btn-sm btn-outline-secondary text-primary"><i class="bi bi-person-vcard-fill"></i></a>
+                                <a href="bank_edit.php?id=<?php echo $b['id'] ?>" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil-fill" title="แก้ไข"></i></a>
                             </td>
                         </tr>
                     <?php

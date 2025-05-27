@@ -19,7 +19,7 @@ $route_id = $_GET['route_id'] ?? '';
 if ($route_id) {
     $route = $db->query("SELECT * FROM customer_routes WHERE id = ? AND deleted_at IS NULL", $route_id)->fetchArray();
 }
-$banks = $db->query("SELECT ba.bank_id, b.bank_name, ba.display_name, ba.account_name, ba.account_number, ba.branch, ba.transaction_count, ba.status FROM bank_accounts ba LEFT JOIN banks b ON ba.bank_id = b.id WHERE ba.deleted_at IS NULL AND ba.status = 'active' ORDER BY ba.display_name;")->fetchAll();
+$banks = $db->query("SELECT ba.id, ba.bank_id, b.bank_name, ba.display_name, ba.account_name, ba.account_number, ba.branch, ba.transaction_count, ba.status FROM bank_accounts ba LEFT JOIN banks b ON ba.bank_id = b.id WHERE ba.deleted_at IS NULL AND ba.status = 'active' ORDER BY ba.display_name;")->fetchAll();
 $routes = $db->query("SELECT * FROM customer_routes WHERE deleted_at IS NULL AND status = 'on' ORDER BY route_name")->fetchAll();
 $salespersons = $db->query("SELECT DISTINCT u.salesperson_id, u.name FROM users u WHERE u.role = 'sales' AND u.salesperson_id IS NOT NULL AND u.deleted_at IS NULL AND u.status = 'on' ORDER BY u.name")->fetchAll();
 ?>
@@ -74,6 +74,7 @@ $salespersons = $db->query("SELECT DISTINCT u.salesperson_id, u.name FROM users 
                         <option value="off" <?php if ($customer['status'] === 'off') echo 'selected'; ?>>ปิดใช้งาน</option>
                     </select>
                 </div>
+                <div class="col-md-8"></div>
                 <div class="col-md-4">
                     <label class="form-label" for="vat_type">ประเภทลูกค้า <span class="red">*</span></label>
                     <select name="vat_type" id="vat_type" class="form-select">
@@ -88,6 +89,14 @@ $salespersons = $db->query("SELECT DISTINCT u.salesperson_id, u.name FROM users 
                         <?php foreach ($salespersons as $s): ?>
                             <option value="<?php echo $s['salesperson_id'] ?>" <?php echo $s['salesperson_id'] == $customer['salesperson_id'] ? 'selected' : '' ?>><?php echo $s['name'] ?></option>
                         <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" for="shipFee">ค่าส่งสินค้า  <span class="red">*</span></label>
+                    <select name="shipFee" id="shipFee" class="form-select">
+                        <?php for ($i=0; $i<=10; $i++){ ?>
+                            <option value="<?php echo $i; ?>" <?php echo $customer['shipFee'] == $i ? 'selected':''; ?>><?php echo $i; ?> บาท</option>
+                        <?php } ?>
                     </select>
                 </div>
             </div>
@@ -150,7 +159,7 @@ $salespersons = $db->query("SELECT DISTINCT u.salesperson_id, u.name FROM users 
                     <select name="bank_account_id" id="bank_account_id" class="form-select">
                         <option value="">-- เลือกบัญชี --</option>
                         <?php foreach ($banks as $b): ?>
-                            <option value="<?php echo $b['id'] ?>" <?php echo $b['id'] == $customer['bank_account_id'] ? 'selected' : '' ?>><?php echo $b['display_name'].' - '.$b['bank_name'].' '.$b['account_name'].' ('.$b['account_number'].')'; ?></option>
+                            <option value="<?php echo $b['id']; ?>" <?php echo $b['id'] == $customer['bank_account_id'] ? 'selected' : '' ?>><?php echo $b['display_name'].' - '.$b['bank_name'].' '.$b['account_name'].' ('.$b['account_number'].')'; ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>

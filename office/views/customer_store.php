@@ -23,7 +23,8 @@ $remark = !empty($_POST['remark']) ? trim($_POST['remark']) : NULL;
 $route_id = !empty($_POST['route_id']) ? $_POST['route_id'] : NULL;
 $salesperson_id = !empty($_POST['salesperson_id']) ? $_POST['salesperson_id'] : NULL;
 $payment_type = !empty($_POST['payment_type']) ? trim($_POST['payment_type']) : NULL;
-$bank_account_id = !empty($_POST['bank_account_id']) ? trim($_POST['bank_account_id']) : NULL;
+$shipFee = !empty($_POST['shipFee']) ? $_POST['shipFee'] : '0';
+$bank_account_id = !empty($_POST['bank_account_id']) ? $_POST['bank_account_id'] : NULL;
 $vat_type = !empty($_POST['vat_type']) ? trim($_POST['vat_type']) : 'no_vat';
 $status = !empty($_POST['status']) ? trim($_POST['status']) : 'on';
 $created_by = $_SESSION['user_id'];
@@ -32,9 +33,9 @@ if ($code === '' || $name === '' || !$route_id) {
     die('กรุณากรอกข้อมูลให้ครบถ้วน');
 }
 
-$db->query("INSERT INTO customers (customer_code, name, nickname, phone, email, lineID, address, remark, route_id, salesperson_id, payment_type, bank_account_id, vat_type, status, created_by)
+$db->query("INSERT INTO customers (customer_code, name, nickname, phone, email, lineID, address, remark, route_id, salesperson_id, payment_type, shipFee, bank_account_id, vat_type, status, created_by)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-    $code, $name, $nickname, $phone, $email, $lindID, $address, $remark, $route_id, $salesperson_id, $payment_type, $bank_account_id, $vat_type, $status, $created_by);
+    $code, $name, $nickname, $phone, $email, $lindID, $address, $remark, $route_id, $salesperson_id, $payment_type, $shipFee, $bank_account_id, $vat_type, $status, $created_by);
 
 header("Location: customer_list.php?route_id=$route_id");
 exit;

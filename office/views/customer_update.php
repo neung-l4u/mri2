@@ -23,8 +23,9 @@ $remark = !empty($_POST['remark']) ? trim($_POST['remark']) : NULL;
 $route_id = !empty($_POST['route_id']) ? trim($_POST['route_id']) : NULL;
 $salesperson_id = !empty($_POST['salesperson_id']) ? trim($_POST['salesperson_id']) : NULL;
 $payment_type = !empty($_POST['payment_type']) ? trim($_POST['payment_type']) : NULL;
-$bank_account_id = !empty($_POST['bank_account_id']) ? trim($_POST['bank_account_id']) : NULL;
-$vat_type = !empty($_POST['vat_type']) ? trim($_POST['vat_type']) : 'no_vat';
+$shipFee = !empty($_POST['shipFee']) ? $_POST['shipFee'] : '0';
+$bank_account_id = !empty($_POST['bank_account_id']) ? $_POST['bank_account_id'] : NULL;
+$vat_type = !empty($_POST['vat_type']) ? $_POST['vat_type'] : 'no_vat';
 $status = !empty($_POST['status']) ? trim($_POST['status']) : 'on';
 $updated_by = $_SESSION['user_id'];
 
@@ -34,6 +35,7 @@ if ($id == 0 || $name === '' || !$route_id) {
 }
 
 $db->query("UPDATE customers SET
+  customer_code = ?,
   name = ?,
   nickname = ?,
   phone = ?,
@@ -44,13 +46,14 @@ $db->query("UPDATE customers SET
   route_id = ?,
   salesperson_id = ?,
   payment_type = ?,
+  shipFee = ?,
   bank_account_id = ?,
   vat_type = ?,
   status = ?,
   updated_by = ?,
   updated_at = NOW()
   WHERE id = ?",
-    $name, $nickname, $phone, $email, $lindID, $address, $remark, $route_id, $salesperson_id, $payment_type, $bank_account_id, $vat_type, $status, $updated_by, $id);
+    $code, $name, $nickname, $phone, $email, $lindID, $address, $remark, $route_id, $salesperson_id, $payment_type, $shipFee, $bank_account_id, $vat_type, $status, $updated_by, $id);
 
 header("Location: customer_list.php?route_id=$route_id");
 exit;

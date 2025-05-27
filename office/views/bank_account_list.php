@@ -21,6 +21,7 @@ $banks = $db->query("SELECT * FROM bank_accounts WHERE bank_id = ? AND deleted_a
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>บัญชีธนาคาร: <?php echo $bank['bank_name']; ?></title>
     <link href="../assets/libs/bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/libs/bootstrap-5.3.3-dist/bootstrap-icons-1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body class="bg-light">
 <div class="container py-5">
@@ -41,7 +42,7 @@ $banks = $db->query("SELECT * FROM bank_accounts WHERE bank_id = ? AND deleted_a
 
     <div class="bg-white p-4 rounded shadow-sm">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="mb-0">รายการบัญชีธนาคาร <?php echo $bank['bank_name']; ?></h4>
+            <h4 class="mb-0"><i class="bi bi-journal-medical"></i> บัญชีธนาคาร <span class="text-primary"> <?php echo $bank['bank_name']; ?></span></h4>
             <a href="bank_account_create.php?id=<?php echo $id; ?>" class="btn btn-primary btn-sm">+ เพิ่มบัญชีใหม่</a>
         </div>
 
@@ -49,15 +50,13 @@ $banks = $db->query("SELECT * FROM bank_accounts WHERE bank_id = ? AND deleted_a
             <table id="tableData" class="table table-borderless table-striped table-hover">
                 <thead class="table-dark">
                 <tr>
-                    <th style="text-align: center">#</th>
-                    <th>ชื่อเรียก</th>
-                    <th>ชื่อบัญชี</th>
-                    <th>เลขที่บัญชี</th>
-                    <th>สาขา</th>
-                    <th>วันที่เปิดใช้</th>
-                    <th style="width: 100px;">ธุรกรรม</th>
-                    <th style="width: 100px;">สถานะ</th>
-                    <th style="text-align: center; width: 80px;">จัดการ</th>
+                    <th style="width: 30px;">#</th>
+                    <th class="text-center" style="width: 120px;">ชื่อเรียก</th>
+                    <th class="text-center">ชื่อบัญชี</th>
+                    <th class="text-center" style="width: 200px;">เลขที่บัญชี</th>
+                    <th class="text-end" style="width: 100px;">ธุรกรรม</th>
+                    <th class="text-center" style="width: 80px;">สถานะ</th>
+                    <th style="width: 80px;"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -67,16 +66,16 @@ $banks = $db->query("SELECT * FROM bank_accounts WHERE bank_id = ? AND deleted_a
                         foreach ($banks as $b):
                 ?>
                     <tr>
-                        <td style="text-align: center;"><?php echo $i; ?></td>
-                        <td><?php echo htmlspecialchars($b['display_name']) ?></td>
-                        <td><?php echo htmlspecialchars($b['account_name']) ?></td>
-                        <td style="width: 150px;"><?php echo htmlspecialchars($b['account_number']) ?></td>
-                        <td style="width: 120px;"><?php echo htmlspecialchars($b['branch']) ?></td>
-                        <td style="width: 110px;"><?php echo $b['open_date'] ?></td>
-                        <td style="text-align: right;"><?php echo $b['transaction_count'] ?></td>
-                        <td><?php echo $b['status'] === 'active' ? 'เปิดใช้งาน' : 'ปิดใช้งาน' ?></td>
-                        <td style="text-align: right;">
-                            <a href="bank_account_edit.php?id=<?php echo $b['id'] ?>" class="btn btn-sm btn-outline-secondary">แก้ไข</a>
+                        <td class="text-end"><?php echo $i; ?></td>
+                        <td class="text-start">
+                            <i class="bi bi-upc-scan" title="รหัสบัญชี"></i>  <small class="text-secondary"><?php echo htmlspecialchars($b['display_name']); ?></small>
+                        </td>
+                        <td class="text-start"><?php echo htmlspecialchars($b['account_name']); ?></td>
+                        <td class="text-start"><?php echo htmlspecialchars($b['account_number']); ?></td>
+                        <td class="text-end"><?php echo number_format($b['transaction_count']); ?> <i class="bi bi-arrow-left-right"></i></td>
+                        <td class="text-center"><?php echo $b['status'] === 'active' ? '<i class="bi bi-check text-success" title="เปิดใช้งาน"></i>' : '<i class="bi bi-x text-danger" title="ปิดใช้งาน"></i>'; ?></td>
+                        <td class="text-end">
+                            <a href="bank_account_edit.php?id=<?php echo $b['id'] ?>" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil-fill" title="แก้ไข"></i></a>
                         </td>
                     </tr>
                 <?php

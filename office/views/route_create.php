@@ -4,6 +4,18 @@ require_once '../assets/db/db.php';
 require_once '../assets/db/initDB.php';
 global $db;
 
+$level = $_GET['lvl'];
+if ($level == 'u')
+{
+    $level = 'up';
+    $levelTxt = 'ตลาดบน';
+}
+else{
+    $level = 'down';
+    $levelTxt = 'ตลาดล่าง';
+}
+
+
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'owner') {
     header("Location: ../index.php");
     exit;
@@ -40,21 +52,28 @@ $salespersons = $db->query("SELECT id, name FROM users WHERE role = 'sales' AND 
         <h4 class="mb-4">เพิ่มสายลูกค้าใหม่</h4>
         <form method="POST" action="route_store.php">
             <div class="row g-3">
-                <div class="col-md-6">
-                    <label class="form-label">รหัสสาย (เช่น BKK-01)</label>
-                    <input type="text" name="route_code" class="form-control" required>
+                <div class="col-md-12">
+                    <label for="route_level" class="form-label">ระดับตลาด : <span class="text-info"><?php echo $levelTxt; ?></span></label>
+                    <select name="route_level" id="route_level" style="display: none;">
+                        <option value="down" <?php echo ($level=='down')?'selected':''; ?>>ตลาดล่าง</option>
+                        <option value="up" <?php echo ($level=='up')?'selected':''; ?>>ตลาดบน</option>
+                    </select>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">ชื่อสาย</label>
-                    <input type="text" name="route_name" class="form-control" required>
+                    <label for="route_code" class="form-label">รหัสสาย (เช่น BKK-01)</label>
+                    <input type="text" name="route_code" id="route_code" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="route_name" class="form-label">ชื่อสาย</label>
+                    <input type="text" name="route_name" id="route_name" class="form-control" required>
                 </div>
                 <div class="col-md-6">
                     <label for="description" class="form-label">คำอธิบาย</label>
                     <textarea name="description" id="description" class="form-control" rows="3"></textarea>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">สถานะ</label>
-                    <select name="status" class="form-select">
+                    <label for="status" class="form-label">สถานะ</label>
+                    <select name="status" id="status" class="form-select">
                         <option value="on" selected>เปิดใช้งาน</option>
                         <option value="off">ปิดใช้งาน</option>
                     </select>
