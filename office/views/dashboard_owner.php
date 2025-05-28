@@ -33,6 +33,12 @@ $total_salespersons = $db->query("SELECT COUNT(*) AS total FROM users WHERE role
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>แดชบอร์ดเจ้าของ</title>
     <link href="../assets/libs/bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .hover-shadow:hover {
+            box-shadow: 0 0 10px rgba(0,0,0,0.15);
+            transition: 0.2s;
+        }
+    </style>
 </head>
 <body class="bg-light">
 <div class="container py-5">
@@ -52,22 +58,30 @@ $total_salespersons = $db->query("SELECT COUNT(*) AS total FROM users WHERE role
     </div>
 
     <div class="row g-4 mb-4">
-        <div class="col-md-6">
-            <div class="bg-white p-3 rounded shadow-sm text-center">
-                <div class="text-muted small">ยอดขายวันนี้</div>
-                <h5 class="text-primary">฿ <?php echo number_format($sale_today['total'] ?? 0, 2); ?></h5>
+        <div class="row g-4 mb-4">
+            <div class="col-md-6">
+                <a href="report_sales.php?type=daily" class="text-decoration-none">
+                    <div class="bg-white p-3 rounded shadow-sm text-center hover-shadow">
+                        <div class="text-muted small">ยอดขายวันนี้</div>
+                        <h5 class="text-primary">฿ <?php echo number_format($sale_today['total'] ?? 0, 2); ?></h5>
+                    </div>
+                </a>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="bg-white p-3 rounded shadow-sm text-center">
-                <div class="text-muted small">ยอดขายเดือนนี้</div>
-                <h5 class="text-success">฿ <?php echo number_format($sale_month['total'] ?? 0, 2); ?></h5>
+            <div class="col-md-6">
+                <a href="report_sales.php?type=monthly" class="text-decoration-none">
+                    <div class="bg-white p-3 rounded shadow-sm text-center hover-shadow">
+                        <div class="text-muted small">ยอดขายเดือนนี้</div>
+                        <h5 class="text-success">฿ <?php echo number_format($sale_month['total'] ?? 0, 2); ?></h5>
+                    </div>
+                </a>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="bg-white p-3 rounded shadow-sm text-center">
-                <div class="text-muted small">ยอดค้างชำระ</div>
-                <h5 class="text-danger">฿ <?php echo number_format($unpaid_total['total'] ?? 0, 2); ?></h5>
+            <div class="col-md-6">
+                <a href="payment_invoices.php?status=unpaid" class="text-decoration-none">
+                    <div class="bg-white p-3 rounded shadow-sm text-center hover-shadow">
+                        <div class="text-muted small">ยอดค้างชำระ</div>
+                        <h5 class="text-danger">฿ <?php echo number_format($unpaid_total['total'] ?? 0, 2); ?></h5>
+                    </div>
+                </a>
             </div>
         </div>
         <!--<div class="col-md-3">

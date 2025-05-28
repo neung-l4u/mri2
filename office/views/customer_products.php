@@ -35,6 +35,15 @@ $customPrices = $db->query("SELECT product_id, custom_price FROM customer_produc
         input[type=number] {
             text-align:right;
         }
+
+        input[type=number]::placeholder {
+            color: lightgray;
+            opacity: 1; /* Firefox */
+        }
+
+        input[type=number]::-ms-input-placeholder { /* Edge 12 -18 */
+            color: lightgray;
+        }
     </style>
 </head>
 <body class="bg-light">
@@ -98,7 +107,9 @@ $customPrices = $db->query("SELECT product_id, custom_price FROM customer_produc
                         <td<?php if ($custom_price !== '') echo ' class="bg-warning-subtle"'; ?>>
                             <input type="number" step="1" min="0" class="form-control"
                                    name="custom_prices[<?php echo $product_id; ?>]"
-                                   value="<?php echo htmlspecialchars($custom_price); ?>">
+                                   value="<?php echo htmlspecialchars($custom_price); ?>"
+                                   placeholder="<?php echo $default_price; ?>"
+                            >
                         </td>
                     </tr>
                 <?php
@@ -109,7 +120,7 @@ $customPrices = $db->query("SELECT product_id, custom_price FROM customer_produc
             </table>
             <div class="mt-4 text-end">
                 <a href="customer_list.php" class="btn btn-secondary">ย้อนกลับ</a>
-                <button type="submit" class="btn btn-primary">บันทึกราคาพิเศษ</button>
+                <button type="submit" class="btn btn-primary">บันทึก</button>
             </div>
         </form>
     </div>
